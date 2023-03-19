@@ -1,0 +1,32 @@
+
+https://debian-handbook.info/browse/ru-RU/stable/sect.apt-get.html
+https://linux.die.net/man/8/apt-get
+
+
+Установка одного и того же набора пакетов несколько раз
+$ dpkg --get-selections > pkg-list
+После этого файл pkg-list будет содержать перечень установленных пактов.
+
+Следующим шагом необходимо передать файл pkg-list на компьютеры, на которых необходимо произвести
+обновление, и использовать следующие команды:
+## Обновить базу данных dpkg's об известных пакетах
+# avail=`mktemp`
+# apt-cache dumpavail > "$avail"
+# dpkg --merge-avail "$avail"
+# rm -f "$avail"
+## Обновить выбор dpkg's
+# dpkg --set-selections < pkg-list
+## Запросить у apt-get установку выбранных пакетов
+# apt-get dselect-upgrade
+
+The first commands record the list of available packages in the dpkg database.
+Then dpkg --set-selections restores the selection of packages that you wish to install, 
+and the apt-get invocation executes the required operations! aptitude does not have this command.
+
+
+После удаления или изменения файлов в пакете, система может быть повреждена. 
+Самый простой способ для восстановления этих файлов является переустановка таких пакет. 
+К сожалению, система упаковки считает, что пакет уже установлен и вежливо отказывается переустановить его.
+Чтобы избежать этого, добавьте --reinstall к apt или apt-get.
+Следующая команда переустановит postfix даже если он уже установлен:
+apt --reinstall install postfix
