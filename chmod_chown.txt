@@ -1,0 +1,26 @@
+sudo chmod 0700 ~/.ssh/
+sudo chmod 0600 ~/.ssh/id*
+sudo chmod 0600 ~/.ssh/authorized_keys
+
+sudo chown -R sergey:sergey ~/.ssh
+
+Значениями по умолчанию являются:
+для файлов: 644 (-rw-r--r--)
+для каталогов: 755 (drwxr-xr-x)
+
+(chmod 644 /etc/my.cnf.d/server.cnf) - эквивалент
+(chmod  u=rwx,g=r,o=r /etc/my.cnf.d/server.cnf) - эквивалент
+
+
+
+0700 (-rwx------)
+0600 (-rw-------)
+
+u 	user 	Владелец файла
+g 	group 	Пользователи, входящие в группу владельца файла
+o 	others 	Остальные пользователи
+a 	all 	Все пользователи (или ugo)
+
++ 	добавить определённые права
+- 	удалить определённые права
+= 	установить определённые права
