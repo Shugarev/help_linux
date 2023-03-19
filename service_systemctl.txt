@@ -1,0 +1,62 @@
+#list all services on your Ubuntu Server 
+service --status-all
+
+# running/non running services
+service --status-all | grep '\[ + \]'
+service --status-all | grep '\[ - \]'
+The service command can be used to list services in all Ubuntu releases, 
+including (Ubuntu 17, 16.04, and 14.04).
+
+systemctl list-units --type service --all
+Since Ubuntu 15, the services are managed by the systemd. With systemd we can use systemctl
+command to get information about running services in our Ubuntu system.
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+To list all services, including inactive units, Type:
+
+systemctl list-units -a
+To List inactive unit, Type:
+
+systemctl list-units -a --state=inactive
+
+Запуск и остановка служб
+sudo systemctl start application.service
+Как мы уже упомянули выше, systemd будет искать файлы *.service для команд управления службами, 
+так что команду можно легко ввести следующим образом:
+sudo systemctl start application
+
+sudo systemctl restart application.service
+sudo systemctl reload application.service
+sudo systemctl reload-or-restart application.service
+sudo systemctl enable application.service
+sudo systemctl disable application.service
+sudo systemctl status application.service
+
+дерево зависимостей
+systemctl list-dependencies sshd.service
+
+systemctl show sshd.service -p Conflicts
+
+sudo systemctl edit nginx.service
+sudo systemctl edit --full nginx.service
+
+Подробнее
+https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units-ru
+
+systemctl is–enabled domoticz.service
+systemctl disable domoticz
+update-rc.d -f  remove
+
+
+systemctl stop [servicename]
+systemctl disable [servicename]
+rm /etc/systemd/system/[servicename]
+rm /etc/systemd/system/[servicename] symlinks that might be related
+systemctl daemon-reload
+systemctl reset-failed
+
+service  prometheus restart
+service network-manager restart
+

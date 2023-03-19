@@ -1,0 +1,48 @@
+Установка percona на ubuntu 20
+https://docs.percona.com/percona-server/5.7/installation/apt_repo.html
+
+sudo apt install gnupg2
+wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+sudo apt update
+sudo apt install percona-server-server-5.7
+
+config files:
+ /etc/mysql/my.cnf 
+ ***
+ !includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/percona-server.conf.d/
+
+# добавить в секцию  [mysqld]
+sudo nano  /etc/mysql/percona-server.conf.d/mysqld.cnf 
+
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/mysql-slow.log
+long_query_time=3
+innodb_buffer_pool_size=6G
+innodb_file_per_table=1
+optimizer_switch = block_nested_loop=off
+sql_mode = NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+skip-name-resolve
+
+
+CREATE DATABASE test_base;
+CREATE DATABASE box_db;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'r00t';
+
+-- Создание пользователей в MySQL
+CREATE USER 'box'@'%' IDENTIFIED BY 'cDKwJDHOQcLfg02-';
+CREATE USER 'test'@'%' IDENTIFIED BY 'eFbWBk%yCgq_dk3_';
+
+
+-- Назначение прав пользователей на базы данных в MySQL
+GRANT ALL ON box.* TO 'box'@'%';  
+GRANT ALL ON test_base.* TO 'test'@'%';
+
+
+FLUSH PRIVILEGES;
+
+sudo service mysql restart
+sudo systemctl status docker
+
+qazxsw12

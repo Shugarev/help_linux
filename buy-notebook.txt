@@ -1,0 +1,29 @@
+matrica: ips
+Зарядка:через Type C
+Поддержка Thunderbolt 4.
+
+https://pn.com.ua/ct/1003/?fp1=30000&fp2=50000&ff=42859&fo=623&sort=price_desc&page=2
+
+
+https://pn.com.ua/ct/1003/?fp1=30000&fp2=50000&ff=42859&fo=623&sort=price_desc&page=2
+Игровой ноутбук Acer Nitro 5 (NH.QBVEP.00A) 8GB/512
+
+https://pn.com.ua/md/5326069/
+Acer Nitro 5 AN515-45 (NH.QB9EU.00D) 
+
+
+boxrootless.app.env
+
+boxrootless.node.env
+boxrootless.project.env
+
+процессор:
+Intel Core i7 10750H, 6 ядер, 12 потоков, 2.6 - 5 ГГц 
+
+https://3dnews.ru/1031182/intel-core-i71165g7-protiv-amd-ryzen-7-4800u
+
+
+domain_admin=secured.sandbox.cibpay.co
+domain_merchant=merchant.sandbox.cibpay.co
+domain_checkout=checkout.sandbox.cibpay.co
+domain_api=api.sandbox.cibpay.co

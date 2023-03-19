@@ -1,0 +1,30 @@
+mycommand > outfile 2> errorfile В разные файлы
+mycommand > outfile 2>&1 В один файл
+
+# Вывод потока ошибок (STDERR) в /dev/null
+grep -R 'root' /etc/ 2>/dev/null
+grep -R  --include='*ini' 'migrator'  2>/dev/null
+
+# Выводит на печать только ошибки
+grep -R  'etc/docker/certs.d/'  >/dev/null
+
+#Вывод потока стандартного вывода (STDOUT) и потока ошибок (STDERR) в /dev/null: 
+сделать что-то > /dev/null 2>&1
+
+
+box@vagrant:~/profile/configs$ cat $HOME/tasker.sh
+#!/bin/bash
+NAMELESS_CONFIGS_DIR=/home/box/profile/configs NAMELESS_DB_CONF=/home/box/profile/configs/db.conf NAMELESS_MODE=production /home/box/boxplat/app/bin/box perl /home/box/boxplat/app/utils/executor.pl Tasker --task $1 --options "$2" $3 $4 $5 $6 $7 $8 $9 $10 > /dev/null 2>&1
+
+Вы можете сами посмотреть, куда направлены стандартные потоки вывода терминала, с помощью команды 
+ls -la /proc/self/fd
+
+Откройте два окна терминала и введите в каждом команду 
+tty 
+Данная команда покажет, какое TTY устройство 
+обслуживает текущий активный терминал. Теперь введите 
+echo "Hello, World!" > /dev/pts/N 
+
+в первом окне терминала, где N — это индекс PTS устройства второго окна, переключитесь на второе окно — и вы 
+увидите ваш ввод с первого окна. Сейчас вы записали данные в PTS устройство второго окна так, как будто бы 
+это сделала программа, работающая в том терминале.

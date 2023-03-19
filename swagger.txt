@@ -1,0 +1,35 @@
+
+# documentation
+https://swagger.io/docs/specification/about/
+
+# github
+https://github.com/swagger-api
+
+# online swagger editor
+https://editor.swagger.io/
+
+В chrome запустил лагин CORS, для подмены в header
+https://starkovden.github.io/integrating-swagger-with-docs.html
+
+https://starkovden.github.io/swagger-ui-tutorial.html
+
+openapi local open n firefox
+swagger local open in firefox
+
+open local file in swagger
+
+
+-----------------remove-------------------
+https://github.com/swagger-api/swagger-ui/issues/7261
+
+https://catwolf.org/qs?id=168efd13-6aaf-4b0e-9af3-57a6aca9b114&x=y
+
+Создайте файл spec.js, содержащий Swagger JSON
+
+Локальное открытие yaml в SwaggerEditor(в браузере)
+1 Скачать https://github.com/swagger-api/swagger-editor
+2 Распаковать архив.
+3 Открыть файл index.html в браузере.
+4 На вкладке File | Import File имортировать yaml файл.
+
+/home/sergey/Documents/example-swagger-doc.yaml

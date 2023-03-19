@@ -1,0 +1,51 @@
+
+ansible-playbook -vvv -k -K -i box/ubuntu18.ini box/install.yml -e dbexist=yes -e selfsigned=yes -e package=box-moneliq-2021-10-28-c019a -e utests=yes
+-vvv - вывод протокола на экран (-v очень мало, -vvvv очень подробно)
+-k ask for connection password (Пароль пользователя box для авторизации по SSH -> 
+находился на машине ssh boxplat@139.59.148.114 в файле pass.txt, при первой загрузке он %RKRowOtR5iI.nI )
+Можно не укзывать если для подключение по ssh из control машины к App машине подходит по ключю и не спрашивает пароль.
+-K ask for privilege escalation password (Пароль пользователя box для повышения привилегий)
+( такой же пароль как и на к (при первой загрузке он %RKRowOtR5iI.nI) )
+Можно не указывать если sudo su выполняется без запрашивания пароля.
+
+-i <имя файла> - конфигурационный файл на основе box.ini.example и данных клиента
+-e EXTRA_VARS  set additional variables as key=value
+-e utests=yes - запуск тестов после установки.
+
+сi/cd при update не обязательно
+
+cd вам не надо
+11:30
+secure_permissions это установка безопасных разрешений файлов. некоторые хочут такое
+это установка прав на файлы. если админы возникать будут
+по хорошему то это надо и при инсталле указывать тоже
+
+# как задеплоить бокс на второй сервер чтобы они работали вместе
+при установке второй ноды надо указывать -e slave=yes
+На update параметр slave не влияет.
+мало того, что каждую запускать отдельно, так ещё и всем после первой -e slave=yes
+=======================================================================================================================
+
+cd $HOME/box/ansible-box-moneliq-2022-01-25-8601f/box/
+
+time ansible-playbook -vv -k -K -i ubuntu18-moneliq.ini install.yml -e "package=box-moneliq-2022-01-05-f402a" -e dbexist=yes -e selfsigned=yes -e utests=yes
+
+time ansible-playbook -v -k -K -i ubuntu18-moneliq.ini update.yml -e "package=box-moneliq-2022-01-25-8601f" -e utests=yes -e cd=yes -e secure_permissions=yes
+
+=======================================================================================================================
+Если есть настоящие сертификаты то они дожны быть в папке runtime и называться
+Если домены
+https://merchant.sandbox.cibpay.co
+https://api.sandbox.cibpay.co
+https://secured.sandbox.cibpay.co
+https://checkout.sandbox.cibpay.co
+то сертификаты должны называться вне зависимости от названия доменов
+ssl.admin.crt
+ssl.admin.key
+ssl.checkout.crt
+ssl.checkout.key
+ssl.merchant.crt
+ssl.merchant.key
+ssl.api.crt
+ssl.api.key
+Возможно нужны файлы сертов с расширением 

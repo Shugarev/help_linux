@@ -1,0 +1,158 @@
+https://conspi.ru/raznoe-2/ssl-sertifikat-klientskij-klientskij-ssl-sertifikat-dlya-chego-ispolzuetsya.html#_TLSSSL_NGINX_Geek_Notes
+
+https://parallel.uran.ru/book/export/html/501
+
+# For a1 -noout означает не выводить дополнительную информацию, как сам серт в закодированном виде.
+box@application-sandbox:~/profile/certs/admin$ openssl x509 -text -noout -in self.crt
+...
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+тут серверный серт не может подписывать клиентские.
+
+ 2>&1 # Перенаправляется stderr на stdout.
+      # Сообщения об ошибках передаются туда же, куда и стандартный вывод.
+openssl s_client -help 2>&1 | grep debug
+-debug                     Extra output
+-security_debug            Enable security debug messages
+-security_debug_verbose    Output more security debug output
+-tlsextdebug               Hex dump of all TLS extensions received
+-debug_broken_protocol     Perform all sorts of protocol violations for testing purposes
+
+man openssl  | grep x509
+x509   X.509 Certificate Data Management.
+ca  Certificate Authority (CA) Management.
+pkcs12  PKCS#12 Data Management. # для работы с сертами в формате p12 для браузеров
+req PKCS#10 X.509 Certificate Signing Request (CSR) Management.# для создания сертификата
+
+
+# Посмотреть сертификат p12
+openssl pkcs12  -info -in tech.p12
+
+openssl x509 -noout -text -in ФАЙЛ_С_СЕРТОМ.crt
+openssl x509 -text -in /etc/pki/ca-trust/source/anchors/test-issure.crt 
+
+
+# Посмотреть значение поля CN у сертификата
+[box@perconaTest ipc]$ openssl x509 -in MCertResp_IA200001.pem  -text | grep 'Issuer'
+Issuer: C=KG, ST=KYRGYZSTAN, L=BISHKEK, O=IPC, OU=IPC, CN=172.26.10.142/emailAddress=a.loshinin@ipc.kg
+
+
+
+
+# create self-sertiticate
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out certificate.crt
+
+
+--------------------------------------------------------------------------------------------------------
+
+# Экспорт сертификата и ключа в PEM-формат
+# В процессе понадобится ввести пароль к p12 (3 раза)
+openssl pkcs12 -in XX.p12 -nocerts -out XX.key
+openssl pkcs12 -in XX.p12 -clcerts -nokeys -out XX.cert
+
+# Конвертирование PEM-ключа в беспарольный
+openssl rsa -in XX.key -out XX.nopass.key
+
+--------------------------------------------------------------------------------------------------------
+Connection: close Date: Tue, 16 Aug 2022 07:11:25 GMT Content-Length: 97 Content-Type: text/html;charset=ISO-8859-1 Client-Date: Tue, 16 Aug 2022 08:22:57 GMT Client-Peer: 146.120.245.17:3443 Client-Response-Num: 1 Client-SSL-Cert-Issuer: /C=KG/ST=KYRGYZSTAN/L=BISHKEK/O=IPC/OU=IPC/CN=172.26.10.142/emailAddress=a.loshinin@ipc.kg Client-SSL-Cert-Subject: /C=KG/ST=KYRGYZSTAN/L=BISHKEK/O=IPC/OU=IPC/CN=172.26.10.142 Client-SSL-Cipher: ECDHE-RSA-AES128-GCM-SHA256 Client-SSL-Socket-Class: IO::Socket::SSL Client-SSL-Warning: Peer certificate not verified 
+
+# Опция отключает проверку ca_cert
+[box@perconaTest configs]$  grep -R 'PERL_LWP_SSL_VERIFY_HOSTNAME'
+global.inc:$ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
+ 
+
+https://habr.com/ru/post/681922/ 
+
+root@cmapuk:/etc/ssl/certs# cat > /usr/share/ca-certificates/ecomm-elpay-kg-ca.crt
+-----BEGIN CERTIFICATE-----  
+***
+
+root@cmapuk:/etc/ssl/certs# dpkg-reconfigure ca-certificates
+................
+done.
+
+root@cmapuk:/etc/ssl/certs# ls -la ecomm-elpay-kg-ca.pem 
+lrwxrwxrwx 1 root root 48 авг 16 11:15 ecomm-elpay-kg-ca.pem -> /usr/share/ca-certificates/ecomm-elpay-kg-ca.crt
+
+
+
+#The s_client command implements a generic SSL/TLS client which connects to a remote host using SSL/TLS. It is a very useful diagnostic tool for SSL servers.
+openssl s_client -connect ecomm-test.elpay.kg:3443  -cert MCertResp_IA200001.pem -key ima_IA200001.key       
+
+openssl s_client -connect 172.26.10.142:3443  -cert MCertResp_IA200001.pem -key ima_IA200001.key       
+
+
+
+В сертификате, поле Common Name(CN) обязательное и должно включать имя, которое точно определяет издателя, 
+выпускающего сертификат.
+
+curl -X POST \
+     -H 'Content-Type: application/x-www-form-urlencoded' \
+     -i  'https://ecomm.elpay.kg:3443/ecomm2/MerchantHandler' \
+     --cacert /etc/pki/ca-trust/source/anchors/ecomm-IPC.crt \
+     --cert ./MCertResp_IA200001.pem  \
+     --key ./ima_IA200001.key \
+     --data 'amount=12750&client_ip_addr=8.8.8.8&command=v&currency=417&description=&language=en&msg_type=SMS'  
+
+# convert pem + key to p12
+openssl pkcs12 -export -out cert.p12 -in cert.pem -inkey key.pem     
+
+openssl s_client -connect secured.cibpay.co:443
+
+
+
+Шаг 3. Создание клиентского сертификата
+У нас в папочек есть серты
+ssl.admin.crl  ssl.admin.crt  ssl.admin.key
+
+Шаг 3.1. Создаем клиентский приватный ключ по тому же принципу.
+openssl genrsa -out client.key 4096
+- создается файлик client.key
+Шаг 3.2. Создаем клиентский сертификат.
+openssl req -new -key client.key -sha256 -out client.csr
+- создается файлик client.csr
+pass:qazxsw/
+Шаг 3.3. Подписываем сертификат нашим центром сертификации
+openssl x509 -req -days 1095 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 0x`openssl rand 16 -hex` -sha256 -out client.pem
+
+# не работает
+openssl x509 -req -days 1095 -in client.csr -CA ssl.admin.crt -CAkey ssl.admin.key -set_serial 0x`openssl rand 16 -hex` -sha256  -out client.pem
+
+Шаг 4. Создание сертфиката в формате PKCS#12 для браузеров.
+openssl pkcs12 -export -in client.pem -inkey client.key -name "Sub-domain certificate for some name" -out client.p12
+
+package Box::Core::Certificate::Client;
+***               
+sub generate
+{
+    my $self = shift;
+    my ($common_name) = @_;
+
+    Carp::croak('common name is required') unless $common_name;
+
+    $self->revoke($common_name);
+
+    chdir $self->{cert_dir};
+
+    $self->_prepareDir();
+
+    $self->_setupCaConfig();
+
+    my $password = Box::Core::Utils->generatePassword();
+
+    $self->_slurp("db/serial");
+
+    $ENV{serial} = $self->_slurp("db/serial");
+    my $organization_name = ($self->_getConfig('certificates::organization') || 'Unknown') . ' ' . ucfirst($self->{for});
+    my $quiet = '>/dev/null 2>&1';
+
+    system("openssl req -new -newkey rsa:4096 -nodes -keyout db/keys/$common_name.key -out db/keys/$common_name.csr -subj '/C=/ST=/O=$organization_name/CN=$common_name' $quiet");
+    system("openssl ca -config $self->{config} -in db/keys/$common_name.csr -out db/keys/$common_name.crt -batch $quiet");
+    system("openssl pkcs12 -export -password pass:$password -in db/keys/$common_name.crt -inkey db/keys/$common_name.key -certfile self.crt -out db/certs/$common_name.p12 $quiet");
+
+# выполнилась 
+openssl req -new -newkey rsa:4096 -nodes -keyout client.key -out client.csr -subj '/C=/ST=/O=organization_name/CN=common_name'
+- создались файлики client.key  client.csr
+
+openssl ca --config ca.config -in client.csr -out clietn.crt

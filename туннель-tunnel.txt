@@ -1,0 +1,49 @@
+туннель делается так(для avc)
+sudo ssh -i /home/cmapuk/.ssh/id_rsa -f -N -L ЛОКАЛЬНЫЙ_ИП:443:95.181.207.60:443 avc@80.240.130.161
+
+подробнее
+# !!! Для AVC внешний proxy ip совпадает с Control ip. !!! Нужно быть аккуратными.
+sudo ssh -i /home/cmapuk/.ssh/id_rsa -f -N -L ЛОКАЛЬНЫЙ_ИП:443:Proxy_ИП:443 avc@Gateway
+
+example for avc:
+sudo ssh -i /home/sergey/.ssh/id_rsa -f -N -L 192.168.0.247:443:95.181.207.60:443 avc@80.240.130.161
+
+# 192.168.0.101 - local home ip 
+sudo ssh -i /home/sergey/.ssh/id_rsa -f -N -L 192.168.0.101:443:95.181.207.60:443 avc@80.240.130.161
+
+# tunel for a1
+sudo ssh -i /home/sergey/.ssh/id_rsa -f -N -L 192.168.0.247:443:185.181.230.115:443 a1@80.240.130.161
+
+-i  identity_file
+-f  Requests ssh to go to background just before command execution.  
+ This is useful if ssh is going to ask for passwords or
+ passphrases, but the user wants it in the background.  This implies -n.
+   The recommended way to start X11 programs at a
+remote site is with something like ssh -f host xterm.
+-N  Do not execute a remote command.  This is useful for just forwarding ports.
+
+# сброс всех туннелей
+ssh -o ClearAllForwardings=yes host
+
+
+на гейте
+-L ГЕЙТ:6443:ПРОКСЯ:443 КОНТРОЛ
+локально
+-L ЛОКАЛЬНЫЙ_ИП:443:ГЕЙТ:6443 a1@ГЕЙТ
+
+sudo ssh -L 192.168.0.122:8080:164.92.163.38:8080 sergey@164.92.163.38
+
+ssh -L 164.92.163.38:8080:31.206.221.76:8080 
+
+# забрать измененея если 22 порт не доступен. Прокидываем тунель.
+# -A ключ прокидывает тунель
+  -A      Enables forwarding of connections from an authentication agent such as ssh-agent(1).  
+This can also be specified on a per-host basis in a configuration file.
+Agent forwarding should be enabled with caution.  Users with the ability to bypass file permissions on the remote host
+(for the agent's UNIX-domain socket) can access the local agent through the forwarded connection.  
+An attacker cannot obtain key material from the agent, however they can perform operations on the keys that 
+enable them to authenticate using the identities loaded into the agent.  A safer alternative may be to use a jump host (see -J).
+
+cd /home/sergey/box/box-project/locals
+GIT_SSH_COMMAND='ssh -A chuga@193.138.146.89  -p 56789 ssh -i ~/.ssh/serg/id_rsa' git pull
+GIT_SSH_COMMAND='ssh -A sergey@193.138.146.89 -p 5544  ssh ' git pull

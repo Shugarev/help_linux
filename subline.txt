@@ -1,0 +1,16 @@
+View | Indentation | Tab width:2
+View |layout | Columns2
+Правой кнопкой мыши на тексте файла скопировать путь к файлу.
+
+Ctrl + L - командная строка в Nautilus
+
+Mc | команда | сравнить файлы
+Mc | команда | сравнить файлы
+Настройки | конфигурация | х Встроееный редактор
+Настройки | Сохранить настройки  | 
+
+Tools | record macros
+<delete>,<end>
+Tools | Stop macros
+Tools | Save macros
+Повтор макроса Ctrl + Shift + Alt + Q

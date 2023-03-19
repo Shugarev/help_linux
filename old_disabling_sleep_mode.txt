@@ -1,0 +1,7 @@
+Отключение спящего режима:
+sudo cp /lib/systemd/system/systemd-suspend.service  /etc/systemd/system/
+sudo nano /etc/systemd/system/systemd-suspend.service
+закомментировать строку
+#ExecStart=/lib/systemd/systemd-sleep suspend
+sudo systemctl reenable systemd-suspend.service
+systemctl suspend

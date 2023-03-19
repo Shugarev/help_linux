@@ -1,0 +1,5 @@
+vim /home/ansible/ansible-box-cib-2022-04-22-6094b/box/redhat-cib.ini
+Нажатие клавиши Insert- смена режима редактирования.
+
+Выход:
+Esc + ":wq"

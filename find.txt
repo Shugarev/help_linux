@@ -1,0 +1,52 @@
+find -cmin -1200 -name "*.R"  поиск файлов измененных за последние 1200 минут с расширением R
+find -name "m4*"
+find . -name "box*stderr*.log" 
+find .  -mtime -6 -name "*R" поиск файлов измененных за последние 6 дней
+
+grep -r --include="*.[R|r]" "apply" поиск R файлов в которых есть слово
+history | grep -E "grep"  поиск grep в истории
+
+grep  -r --include="*.[R|r]" "@" /mnt/files/workdata/work/merchants
+
+find /home/box/boxplat/ | grep DBI.pm
+
+# показать список файлов и директорий как дерево. Очень наглядно.
+tree 
+
+-type f - искать только файлы.
+-type d - поиск папки в Linux.
+-maxdepth - максимальная глубина поиска по подкаталогам, для поиска только в текущем каталоге установите 1.
+-iname Не учитывать регистр при поиске по имени:
+
+# Поиск файлов с расширение doc или tmp вывод списком -> передача аргументов команде ls 
+find . -type f  \( -name  \*.doc -o -name \*.tmp \) -print0 | xargs -0 ls -l
+
+# nano syntax highlighting
+найти месторасположение всех таких файлов, связанных с nano, можно по информации из менеджера пакетов:
+dpkg -S nano | grep '\.nanorc$'
+find /usr/share/nano/ -iname "*.nanorc" -exec echo include {} \; >> ~/.nanorc
+Alt + Shift + 3 - show line number
+Alt+^
+Ctrl+u - Paste the contents of the clipboard at the current cursor position
+Alt+u - Undo
+
+
+#how to install a certificate in google chrome browser 
+chrome://settings/certificates
+#Settings | Privacy and security | Manage sertificates 
+
+#show sites password in google chrome browser
+#Settings | Autofill
+chrome://settings/passwords
+
+
+#Settings | Privacy and security | Clear browsing data
+chrome://settings/clearBrowserData
+
+#chrome extensions
+https://chrome.google.com/webstore/category/extensions
+
+/etc/my.cnf /etc/mysql/my.cnf /usr/etc/my.cnf ~/.my.cnf 
+
+
+

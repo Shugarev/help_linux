@@ -1,0 +1,2 @@
+profiles:
+moneliq: mnlq   walletto: wlt   connectum: cnt   tutu:tutu

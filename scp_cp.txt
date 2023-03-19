@@ -1,0 +1,75 @@
+#https://www.golinuxcloud.com/ssh-copy-folder-local-to-remote-server-linux/
+
+#copy dir from localhost to remote server, a capital P 
+scp -r -P port <path to dir on localhost> user@<host>:<path on remote host>/
+
+# tmp directory must exist
+server1:~ # scp -r /tmp/deepak temp@server2:/home/temp/
+server2:~ # ll /home/temp/deepak/
+
+# copy dir deepak to dir deepak_local
+server1:~ # scp -r /tmp/deepak temp@server2:/home/sergey/deepak_local
+
+#If you wish to copy directory /tmp/deepak to remote server using a different directory name then use the below syntax
+ scp -r <path to dir on localhost>/* user@<host>:<path on remote host>/
+
+ server1:~ # scp -r /tmp/deepak/* temp@server2:/home/temp/rahul/
+ server2:~ # ls -l /home/temp/rahul/
+
+ 
+ #Copy directory and files from remote to local server
+scp -r <user>@<host>:<source path on remote host> <destination on localhost>/
+
+scp -r root@server2:/home/temp/deepak /tmp/
+
+root@server1 ~]# scp -r root@server2:/home/temp/deepak /tmp/
+
+# =================================================================================
+ssh box@167.71.11.190 -p 54322
+
+# copy from app to control
+rm -r tutu_certs
+scp -r box@10.110.0.8:/home/box/profile/certs/  /home/box/tutu_certs/
+
+# from control to proxy
+ssh box@10.110.0.3 'rm -r tutu_certs'
+scp -r /home/box/tutu_certs/  box@10.110.0.3:/home/box/
+
+# on proxy-machine (cp -r /source/. /dest)
+sudo mkdir /etc/nginx/tutu_certs
+sudo cp -r /home/box/tutu_certs/. /etc/nginx/tutu_certs
+# =================================================================================
+# copy by file regexp 
+cp /home/ansible/runtime/*.{conf,txt}   /home/ansible/ansible-box-cib-2022-04-22-6094b/box/runtime/
+
+# ================================copy tech.p12 и серты from App to Local machine =================================================
+# скопировать пароли и сертификаты из App на gate way из Control машины
+scp -r ansible@134.19.219.185:/home/ansible/ansible-box-cib-2022-04-22-6094b/box/runtime/box*.txt  /home/cib/runtime/
+scp  ansible@134.19.219.185:/home/ansible/ansible-box-cib-2022-04-22-6094b/box/runtime/tech.p12  /home/cib/runtime/
+
+# скопировать пароли и сертификаты gate way на Андрея сервер
+scp -r -i ~/.ssh/serg/id_rsa  cib@80.240.130.161:/home/cib/runtime/box*.txt /home/chuga/boxcib/runtime/
+scp  -i ~/.ssh/serg/id_rsa  cib@80.240.130.161:/home/cib/runtime/tech.p12 /home/chuga/boxcib/runtime/
+
+
+# ================================copy cert from App to Proxy =================================================
+# Скопировать сертификаты с App-машин (через Control) в /etc/nginx/
+# user:ansible
+# pass:AsdQwe123!@#
+scp -r box@172.25.198.4:/home/box/profile/certs/  ansible@172.25.198.3:/home/ansible/box_cert/
+
+# on proxy-machine (cp -r /source/. /dest)
+sudo mkdir /etc/nginx/box_certs
+sudo cp -r /home/ansible/box_cert/. /etc/nginx/box_certs/
+
+sudo mkdir sites-available sites-enabled
+# sites-available - содержит nginx config файлы  
+# sites-enabled - содержит симлинки на файлы конфигурации
+
+# создать и проверить nginx config file
+sudo vim /etc/nginx/sites-available/nginx-cib
+
+# создать ссылку и положить ее в 
+sudo ln -s /etc/nginx/sites-available/nginx-cib /etc/nginx/sites-enabled/
+
+--------------------------------------------------------------remove ---------------------------------------------------

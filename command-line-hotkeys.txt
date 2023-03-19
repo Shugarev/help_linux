@@ -1,0 +1,131 @@
+----------------------hotkey------------------------------------------
+cd - "выполняет предущую команду cd.
+~    путь к домашней директории
+!! You can re-do the previous command with !!
+sudo !! выполнить предидущую команду под sudo
+Ведущий пробел в команде не записывает ее в bashrc history comands.
+Проверки орфография
+look win
+history N  вывести N команд в истории
+
+
+ls
+ -a, --all                  do not ignore entries starting with .
+ -r, --reverse              reverse order while sorting
+ -R, --recursive            list subdirectories recursively
+ -S                         sort by file size
+      --sort=WORD            sort by WORD instead of name: none -U,
+                             extension -X, size -S, time -t, version -v
+      --time=WORD            with -l, show time as WORD instead of modification
+                             time: atime -u, access -u, use -u, ctime -c,
+                             or status -c; use specified time as sort key
+                             if --sort=time
+------------------------------------------------------------------------
+Controlling the Screen
+Ctrl+L: Clear the screen. This is similar to running the “clear” command.
+Ctrl+Q: Resume output to the screen after stopping it with Ctrl+S.
+Ctrl+S: Stop all output to the screen. This is particularly useful when running commands with a lot of long, 
+verbose output, but you don’t want to stop the command itself with Ctrl+C.
+
+Moving the Cursor
+Ctrl+A or Home: Go to the beginning of the line.
+Ctrl+E or End : Go to the end of the line.
+Alt+B : Go left (back) one word.
+Ctrl+B: Go left (back) one character.
+Alt+F : Go right (forward) one word.
+Ctrl+F: Go right (forward) one character.
+
+Deleting Text
+Ctrl+D or Delete   : Delete the character under the cursor.
+Alt+D              : Delete all characters after the cursor on the current line.
+Ctrl+H or Backspace: Delete the character before the cursor.
+
+Fixing Typos
+Alt+T : Swap the current word with the previous word.
+Ctrl+T: Swap the last two characters before the	 cursor with each other. You can use this to quickly fix typos when you type two characters in the wrong order.
+Ctrl+_: Undo your last key press. You can repeat this to undo multiple times.
+
+Cutting and Pasting
+Ctrl+W: Cut the word before the cursor, adding it to the clipboard.
+Ctrl+K: Cut the part of the line after the cursor, adding it to the clipboard.
+Ctrl+U: Cut the part of the line before the cursor, adding it to the clipboard.
+Ctrl+Y: Paste the last thing you cut from the clipboard. The y here stands for “yank”.
+
+Capitalizing Characters
+Alt+U: Capitalize every character from the cursor to the end of the current word, converting the characters to upper case.
+Alt+L: Uncapitalize every character from the cursor to the end of the current word, converting the characters to lower case.
+Alt+C: Capitalize the character under the cursor. Your cursor will move to the end of the current word.
+
+
+Нажмите Ctrl-R, начните набирать команду, увидите вариант из истории.
+Можно продолжить набирать, и предлагаемые варианты будут меняться, 
+если набираемые символы не соответствуют ранее предложенному варианту. 
+А можно в любой момент ещё несколько раз нажать Ctrl-R и сразу выбрать из других исторических вариантов. 
+Чтобы вернуться к пропущенному варианту - Ctrl-Shift-R.
+
+Ctr+Z:  pause the process
+fg   :  return to process
+
+Launchrs:
+Ctrl+Alt+T: Launch terminal
+
+Navigation:
+Alt+Tab    : Switch windows
+Super+Tab  : Switch applications
+Ctr+Super+D: Hide all normal windows
+
+System:
+Super+A: Show all applications
+Super+L: Lock screen
+Super+V: Show the notafication list 
+Alt+F2 : Run console
+
+Windows:
+Super+Arrow keys: Snap windows
+Super+H         : Hide window
+
+
+Settings | Privacy | Screen Lock | Blank Screen Delay
+
+------------------------------------------------------------------------
+Управление задачами
+jobs Перечисляет ваши задачи
+& Выполнить задачу в фоновом режиме
+^Z Приостановить выполнение текущей (интерактивной) задачи
+suspend Приостановить командный процессор
+fg Перевести задачу в интерактивный режим выполнения
+bg Перевести приостановленную задачу в фоновый режим
+выполнения
+
+>> /dev/null - перенаправление stdout в /dev/null
+
+2>&1 # Перенаправляется stderr на stdout.
+      # Сообщения об ошибках передаются туда же, куда и стандартный вывод.
+https://www.opennet.ru/docs/RUS/bash_scripting_guide/c11620.html      
+
+------------------------------------------------------------------------
+mycommand1; mycommand2; mycommand3
+то сначала запустится первая команда mycommand1, а когда управление вернется в терминал, то запустится вторая и так далее.
+Это называется последовательным выполнением команд. Вне зависимости от того, как выполнилась предыдущая команда, 
+вторая команда должна будет запуститься
+
+mycommand1 && mycommand2 && mycommand3
+mycommand2 будет выполнена только в том случае, если команда mycommand1 была выполнена успешно.
+
+mycommand1 || mycommand2 || mycommand3
+mycommand2 будет выполнена только, если mycommand1 вернула ошибку. 
+Каждая следующая команда запускается только если предыдущая вернула ошибку.
+------------------------------------------------------------------------
+Вывод результатов работы команд в виде таблицы
+mount | column –t
+Многократный повтор команды до её успешного завершения
+
+
+Сортировка процессов по используемой памяти
+ps aux | sort -nk 4
+Сортировка процессов по использованию CPU делается так:
+ps aux | sort -nk 3
+
+Автоматический ответ yes или no
+yes | apt-get update
+yes | command_or_script

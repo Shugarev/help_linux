@@ -1,0 +1,9 @@
+Посмотреть, что в кроне
+crontab -e 
+
+запустить cron
+./run_cron.sh &
+запустить cron с nonhup, чтобы не было перерыва в момент сесии.
+nohup ./run_cron.sh &
+
+nohup /home/sergey/Python/cryptofx-db/run_cron.sh &

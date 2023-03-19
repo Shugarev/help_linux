@@ -1,0 +1,31 @@
+Посмотреть, что в кроне
+crontab -e 
+
+запустить cron
+./run_cron.sh &
+запустить cron с nonhup, чтобы не было перерыва в момент сесии.
+
+# смотреть nohup в nohup.txt
+
+
+# Добавить пользователя box в /etc/cron.allow  и поменять права на этот файл
+TASK [box_add_cron_jobs : Add cron job monitor] **********************************************************************************************
+task path: /home/ansible/ansible-box-cib-2022-06-29-0b8dc/box/roles/box_add_cron_jobs/tasks/main.yml:14
+fatal: [cib-app]: FAILED! => {"changed": false, "failed": true, "msg": "You (box) are not allowed to use this program (crontab)\nSee crontab(1) for more information\n"}
+
+# cat /etc/cron.allow 
+root
+box
+
+# chmod 0644 /etc/cron.allow
+
+minute hour day_of_month month day_of_week command_to_run
+
+ Выполнять задание в 18 часов 7 минут 13 мая если это пятница
+7 18 13 5 5 /home/www/myscript.pl
+# Выполнять задание раз в час в 0 минут
+0 */1 * * * /home/www/myscript.pl
+# Выполнять задание каждые семь часов в 0 минут
+0 */7 * * * /home/www/myscript.pl
+# Выполнять задание по воскресеньям в 10 час 30 минут
+30 10 * * 0 /home/www/myscript.pl

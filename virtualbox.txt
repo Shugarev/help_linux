@@ -1,0 +1,78 @@
+https://developer.hashicorp.com/vagrant/docs/cli/global-status
+vagrant:
+# показывает все статусы всех виртуальных машин, 
+vagrant global-status
+но данные могут захешироваться поэтому выполняем команду
+vagrant global-status --prune
+
+
+hold virtualbox
+sudo apt-mark hold virtualbox
+
+https://linuxize.com/post/how-to-install-virtualbox-on-ubuntu-20-04/
+sudo journalctl -xe
+sudo apt-get remove --purge virtualbox*
+sudo rm ~/"VirtualBox VMs" -Rf
+sudo rm ~/.config/VirtualBox/ -Rf
+sudo ps aux | grep -i "vbox"
+sudo pkill VBox*
+sudo apt autoremove
+
+https://phoenixnap.com/kb/install-virtualbox-on-ubuntu
+
+
+Err:12 https://www.virtualbox.org/virtualbox/debian focal Release 
+  404  Not Found [IP: 137.254.60.32 443]
+Get:14 http://security.ubuntu.com/ubuntu focal-security/universe amd64 DEP-11 Metadata [94,3 kB]
+Get:15 http://security.ubuntu.com/ubuntu focal-security/multiverse amd64 DEP-11 Metadata [940 B]
+Reading package lists... Done       
+E: The repository 'http://virtualbox.org/virtualbox/debian focal Release' does not have a Release file.
+N: Updating from such a repository can't be done securely, and is therefore disabled by default.
+N: See apt-secure(8) manpage for repository creation and user configuration details
+
+
+
+https://www.virtualbox.org/wiki/Download_Old_Builds_6_1
+_6.1.26-145957_Ubuntu_eoan_amd64.deb - don't work
+
+cd /etc/apth/
+grep -R  virt .
+
+Binary file ./trusted.gpg~ matches
+./sources.list.d/virtualbox.list:deb [arch=amd64] http://virtualbox.org/virtualbox/debian focal contrib
+Binary file ./trusted.gpg matches
+
+
+
+https://bobcares.com/blog/how-to-delete-repository-and-gpg-key-in-ubuntu/
+sudo apt-key list | grep virtual        
+# remove keys
+sudo apt-key del "B9F8 D658 297A F3EF C18D  5CDF A2F6 83C5 2980 AECF"
+sudo apt-key del "7B0F AB3A 13B9 0743 5925  D9C9 5442 2A4B 98AB 5139"
+
+***************************************************************************************
+https://linuxways.net/ubuntu/how-to-install-virtualbox-on-ubuntu-20-04-lts/
+
+# Step 1: Import the Oracle Public key
+wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add –echo 
+
+# Step 2: Add apt repository for VirtualBox
+echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | \
+
+sudo tee -a /etc/apt/sources.list.d/virtualbox.list
+ 
+# Step 3: Installing the VirtualBox
+sudo apt update
+sudo apt install virtualbox-6.1
+
+# Step 4: Install Extension pack for Virtualbox
+wget https://download.virtualbox.org/virtualbox/6.1.8/Oracle_VM_VirtualBox_Extension_Pack-6.1.8.vbox-extpack
+
+sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.1.8.vbox-extpack
+
+Step 5: Launch or start Virtualbox
+
+***************************************************************************************
+Сделать snapshot: https://tavalik.ru/snapshots-in-virtualbox/
+Встать на вирталку, которой нужно пользоваться.  В верхнем меню нажать take и дать snapshot понятное название с описанием

@@ -1,0 +1,186 @@
+# Перед нарезкой обновить проект и сабмодули
+cd ~/box/box-project/project
+git pull --rebase
+git submodule update --recursive
+
+cd ~/box/box-deploy/box_ansible
+git pull --rebase
+
+# Это возвращает рабочую копию репозитория на состояние указанной версии, если надо сделать релиз с указанным hash
+git reset --hard <hash>
+git submodule update --recursive
+
+------------ Работа с тегами------------------------
+# Cоздать ветку от мастера с hash и перейти не нее.
+git checkout -B <hash>  
+
+-B <new_branch>
+Creates the branch <new_branch> and start it at <start_point>; if it already exists, then reset it to <start_point>. 
+This is equivalent to running "git branch" with "-f"; see git-branch(1) for details.
+
+------------ Коля------------------------
+
+git checkout d7e947298b9f18b496e52dc8dd8a5d4f8cd7f568
+git checkout -b old_master
+./docker.sh build && ./docker.sh tag_release
+
+------------ доступ на gitlab------------------------
+p12 в браузер добавить, потом сюда https://git.smarthomedevs.work/
+и регаться на почту тайрелла
+https://git.smarthomedevs.work/ положить свой ssh public key
+
+------------------------------------------------------------------------
+/etc/hosts - проверить адреса
+~/.ssh/config - ssh config git
+~/.gitconfig - alias git
+
+git status - информация по текущему состоянию
+
+git log         - показать список последних коммитов в ветке
+git log  -1 -p  - показать последний комит
+
+git checkout master    - перейти на  мастер
+
+----------------------Отмена изменений в файле--------------------
+git checkout -- CONTRIBUTING.md - отменяет изменения в файле
+git checkout origin/master [filename] - отменяет изменения в файле, возвращает файл к состоянию в мастере.
+git checkout oneclick_vts_KTIPRtKM [filename] - отменяет изменения в файле, возвращает файл к состоянию в oneclick_vts_KTIPRtKM.
+git checkout  master .  - отменяет изменения вceх файлов и возвращает состояние этих файлов к мастеру
+
+----------------------Отмена индексации файла--------------------
+git reset HEAD [filename]  
+если мы добавили новый файл командой git add * ( git add CONTRIBUTING.md), а файл нам в ветке не нужен. 
+git reset HEAD CONTRIBUTING.md - убирает файл из индекса
+--------------------------Отмена действий с помощью git restore--------------------------
+По сути, это альтернатива git reset,
+Например, предположим, что вы изменили два файла и хотите зафиксировать их как два отдельных изменения, 
+но случайно набираете git add * и индексируете их оба. Как вы можете убрать из индекса один из двух? 
+Убирает файл из индекса:
+git restore --staged CONTRIBUTING.md
+
+------------------------------Откат измененного файла с помощью git restore----------------------------
+вернуть CONTRIBUTING.md обратно к тому, как он выглядел при последнем коммите
+git restore CONTRIBUTING.md
+
+# Показвыает разницу между текущим состоянием файла и состоянием файла в мастере
+git diff master:[filename] [filename]
+git diff oneclick_vts_KTIPRtKM:[filename] [filename] diff file and its state in oneclick_vts_KTIPRtKM
+
+--------------------------Работа с удалёнными репозиториями---------------------------
+Данная команда связывается с указанным удалённым проектом и забирает все те данные проекта, которых у вас ещё нет.
+После того как вы выполнили команду, у вас должны появиться ссылки на все ветки из этого удалённого проекта, 
+которые вы можете просмотреть или слить в любой момент. ажно отметить, что команда git fetch забирает данные 
+в ваш локальный репозиторий, но не сливает их с какими-либо вашими наработками и не модифицирует то, над чем 
+вы работаете в данный момент. Вам необходимо вручную слить эти данные с вашими, когда вы будете готовы.
+git fetch
+
+git pull           - затянуть изменения 
+git pull --rebase  - затянуть изменения, если мы планируем комитить в репозиторий. Если есть не закоммиченные 
+изменения то --rebase выполниться не даст
+
+-------------------------Просмотр удалённых репозиториев-------------------------
+git clone https://github.com/Shugarev/django-sklearn_v2.git - клонировать репозиторий
+git remote -v - показывает текущий адрес репозитория.
+git config --list
+
+git revert HEAD
+откатывает проект к более раннему состоянию, удаляя все последующие коммиты, как это делает команда git reset.
+
+git revert 1af17e
+У команды revert есть два крупных преимущества по сравнению с reset.
+Во-первых, она не меняет историю проекта и производит операцию, безопасную для коммитов. Во
+-вторых, её объектом выступает конкретный коммит, созданный в любой момент истории, а git 
+reset всегда берёт за точку отсчёта текущий коммит. К примеру, если нужно отменить старый коммит с
+помощью git reset, придётся удалить все коммиты, поданные после целевого, а затем выполнить их повторно. 
+Следовательно, команда git revert — гораздо более удобный и безопасный способ отмены изменений.
+
+Список коммитов
+git remote show origin
+
+git stash -  сохраняет неподтвержденные изменения (индексированные и неиндексированные) 
+в отдельном хранилище, чтобы вы могли вернуться к ним позже. Затем происходит откат до исходной рабочей копии.
+Нужно стешить директрию ~/box/box-project/project/box потому, что в ней находится Stunnix-Perl-Obfus-3.7
+
+git stash apply (достать изменения)
+
+tig - для просмотра изменения
+/номер ветки для быстрого поиска
+# git с другим ключом
+GIT_SSH_COMMAND='ssh -i ~/.ssh/serg/id_rsa' git pull
+
+GIT_SSH_COMMAND='ssh -i ~/.ssh/serg/id_rsa' git clone git@writingbears.com:box-deploy.git
+
+# для получения данных локали
+git submodule update --recursive --init
+#../project/local
+
+Последовательность команд:
+cd ~/box/box-project/project/
+git status
+git log 
+# Берем has_id ветки(53a7dcf) и делаем эту ветку мастером
+git checkout -B master 53a7dcf
+git up 
+# обновить сабмодули
+git submodule update --recursive
+
+git checkout -B master 6cde68e
+
+git reset --hard <HASH>
+git submodule update --recursive
+----------------------------------------
+Изменить адрес репозитория.
+
+origin	git@writingbears.com:box.git (fetch)
+origin	git@writingbears.com:box.git (push)
+
+git remote set-url origin new.git.url/here
+
+cd ~/box/box-project/project
+git remote 	git@writingbears.com:box.git origin git@smarthomedevs.work:box/box.git
+
+----------------------------------------
+#git clone <ссылка на репозиторий> <название папки>
+
+# box repository old
+git clone git@writingbears.com:box-deploy.git
+
+# Там гит переехал на другой сервер
+# нужно поменять старый адрес на git.smarthomedevs.work
+
+# box repository new but does not work.
+git clone git@smarthomedevs.work:box-deploy.git
+
+----------------------------------------
+qq#GIT_SSH_COMMAND='ssh -i ~/.ssh/serg/id_rsa' git clone --branch $opts{local_branch} git\@writingbears.com:box-local.git $opts{source}/locals#,
+qq#GIT_SSH_COMMAND='ssh -i ~/.ssh/serg/id_rsa' git clone git\@writingbears.com:wobbla.git $opts{source}/wobbla#,
+----------------------------------------
+# создать новую ветку
+git branch add_metrics_to_ibs_profile
+# перейти на эту ветку
+git checkout add_metrics_to_ibs_profil
+# В команде выбрать update если не нужно добавлять новые файлы
+git add -i
+# 
+git commit -m "Добавлен таск add_metrics_service в профиль ibs"
+
+# скачать через ssh ( в гите ниже ссылка)
+git clone git@smarthomedevs.work:shield/catboost.git
+docker build -t shugarev1974/check_order_api_catboost .
+
+git add -i 
+# выбрать 2 пункт update 
+# Указать * ( все файлы)
+# нажать q - выход
+git status
+# посмотерть статус
+git commit -m "Изменен Docker файл для уменьшения размера образа. Удалил поддрежку pytorch."
+git push
+
+Закоммитил изменения 
+Изменен Docker файл для уменьшения размера образа. Удалил поддрежку pytorch.
+Проверил работоспособность.
+
+GIT_SSH_COMMAND='ssh -A sergey@193.138.146.89 -p 5544  ssh -i ~/.ssh/serg/id_rsa' git pull --rebase
+
+GIT_SSH_COMMAND='ssh -A sergey@193.138.146.89 -p 5544 ssh' git clone git@writingbears.com:box-deploy.git

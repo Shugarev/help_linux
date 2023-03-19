@@ -1,0 +1,72 @@
+which mysql # path to mysql 
+/usr/bin/mysql
+/usr/bin/mysql --help
+
+# list config files:
+/usr/sbin/mysqld --verbose --help | grep -A 1 'Default options'
+Default options are read from the following files in the given order:
+/etc/my.cnf /etc/mysql/my.cnf ~/.my.cnf 
+
+mysql --user=root --password=r00t --host=192.168.0.247 --port=3306
+mysql -u root -pr00t -h 192.168.0.247  -P 3306 test_db
+
+# Импортировние данных из файлов
+cat data/*.sql | mysql -utest -p<password> test_base
+mysql -utest -p<password>  -h127.0.0.1  -P 3040 test_base < database.sql
+
+# Создание резервной копии.
+mysqldump --host=akmasoft.com --user=ui-registry_qa --password=ui-registry_qa ui-registry_qa > ui-registry_qa.sql
+mysqldump --user=accountsystem_qa --password=accountsystem_qa --host=akmasoft.com  --skip-extended-insert accountsystem transaction --where="annualreport =8" >> ar8.sql
+
+# Обязательные настройки БД:
+# Буфер используется для хранения индексов в памяти. Рекомендуемый размер буфера - 70-80% от объема памяти на БД-сервере.
+($ cat /proc/meminfo | grep MemTotal
+MemTotal:        8033976 kB -> 8GB )
+innodb_buffer_pool_size=6G
+
+# Хранение таблиц в отдельных файлах
+innodb_file_per_table=1
+
+# Опции для оптимизации быстродействия приложения
+optimizer_switch = block_nested_loop=off
+sql_mode = NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+# Рекомендуемые настройки БД:
+# Записывать в лог запросы, которые выполняются медленнее 3 секунд:
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/mysql-slow.log
+long_query_time=3
+
+# Передача паролся со специальными символами и выполнить запрос.
+mysql -u cib-user -pDfa131\#\$s1  cib -e 'UPDATE user SET password_updated="2022-06-16 14:18:27"; SELECT * from user; '
+echo 'SELECT * from user;' | mysql -u cib-user -p  cib
+
+# выполнить команду mysql на App машине находясь на  Control машине.
+ssh ansible@172.25.198.2 'mysql -ucib-user -pDfa131\#\$s1 cib -e "select * from user"'
+
+# Увеличить дату обновления пароля для базы. 
+ssh ansible@172.25.198.2 'd=$(date "+%Y-%m-%d %H:%M:%S" -d "+1 month");query="UPDATE user SET password_updated=\"$d\"";mysql -ucib-user -pDfa131\#\$s1 cib -e "$query";'
+
+# Сравнение времени в mysql и в консоли:
+echo 'select now();' | mysql -h 172.25.198.2 -u cib-user-test -p test_cib; date
+
+echo 'select now();' | mysql  -u box -p box; date
+cDKwJDHOQcLfg02-
+
+sudo service mysql restart
+
+# Displaying Query Results Vertically
+SELECT * FROM  test_table limit 4\G
+
+# query cache добавлять когда мало памяти на машине
+query_cache_type=1 
+query_cache_size = 10M 
+query_cache_limit=256K
+
+#path to log file 
+mysql --help | grep Default -A 1
+
+
+ps -ef | grep mysql 
+mysql     3586     1  0 17:34 ?        00:00:06 /usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid
+/usr/sbin/mysqld --verbose --help | grep Default -A 1

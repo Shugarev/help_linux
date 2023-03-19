@@ -1,0 +1,39 @@
+sudo apt install ufw
+
+для восстановления настроек по умолчанию:
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+
+sudo ufw status
+
+sudo ufw app list
+sudo ufw enable
+
+sudo ufw allow 'Nginx Full'
+sudo ufw allow 'OpenSSH'
+
+sudo ufw allow http
+sudo ufw allow 80
+
+sudo ufw allow https
+sudo ufw allow 443
+
+
+
+
+sudo nano /etc/ufw/applications.d/nginx.ini  ???????
+[Nginx HTTP]
+title=Web Server
+description=Enable NGINX HTTP traffic
+ports=80/tcp
+
+[Nginx HTTPS] 
+title=Web Server (HTTPS) \
+description=Enable NGINX HTTPS traffic
+ports=443/tcp
+
+[Nginx Full]
+title=Web Server (HTTP,HTTPS)
+description=Enable NGINX HTTP and HTTPS traffic
+ports=80,443/tcp

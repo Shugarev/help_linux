@@ -1,0 +1,27 @@
+https://www.digitalocean.com/community/tutorials/how-to-install-the-anaconda-python-distribution-on-ubuntu-20-04-ru
+
+cd /tmp
+
+curl https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh --output anaconda.sh
+
+sha256sum anaconda.sh
+
+Output
+2b9f088b2022edb474915d9f69a803d6449d5fdb4c303041f60ac4aefcc208bb  anaconda.sh
+
+bash anaconda.sh
+
+#Output
+
+#Welcome to Anaconda3 2020.02
+
+#In order to continue the installation process, please review the license
+#agreement.
+#Please, press ENTER to continue
+#>>>  
+
+Output
+Do you approve the license terms? [yes|no]
+
+source ~/.bashrc
+conda list

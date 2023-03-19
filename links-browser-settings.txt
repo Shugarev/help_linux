@@ -1,0 +1,17 @@
+==============загрузка сертификата в браузер===================================
+chrome://settings/certificatsettings/ | Privacy and security | Security | Manage certificates 
+
+ ==============urls===================================
+Jitsi конференция:
+ https://hardwork.ninja/random
+
+Документация Боксплат
+https://docs.boxplat.com/ 
+
+# админка бокса
+http://admin.boxdeploy.test/contract/list?success=1
+
+
+sandbox tutu
+supportbp
+https://admin.sb.tutu.market

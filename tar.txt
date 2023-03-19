@@ -1,0 +1,30 @@
+tar -xf archive.tar          # Extract all files from archive.tar.
+tar -cf archive.tar foo bar  # Create archive.tar from files foo and bar.
+
+
+tar cfvz   box-a1-2022-02-10-84529.tar.gz    box-a1-2022-02-10-84529
+Options:
+-x, --extract, --get  Extract files from an archive
+-f, --file=ARCHIVE    If it is set, its value will be used as the archive name.  
+Otherwise, tar will assume the compiled-in default. 
+-c, --create         Create a new archive.
+-z, --gzip, --gunzip, --ungzip  Filter the archive through gzip(1).
+-t, --list   List the contents of an archive, tar -tvf  archive.tar.gz
+
+tar cfvz patch 
+
+tar cfvz  profile_certs_admin.tar.gz .
+
+tar cfvz archive.tar.gz 
+
+tar cfvz box-wlt-2022-10-17-e1fd8.tar.gz box-wlt-2022-10-17-e1fd8
+
+cd tmp 
+tar cfvz box-wlt-2022-11-15-33e4b.tar.gz box-wlt-2022-11-15-33e4b
+
+tar cfvz tmp-browser_details_for_token_pay_dU3qYuwK_ON_33e4b.tar.gz  api/src/Box/Api/Service/Process/TokenPay.pm api/tests/action/BoxApiProcessTokenPayTest.pm app/tests/files/token-authorize-google-pay.json checkout/htdocs/js/gpay.js checkout/src/Box/Checkout/Service/Root/GooglePayDo.pm checkout/src/Box/Checkout/Service/Root/TokenPayBase.pm  checkout/tests/action/BoxCheckoutServiceRootGooglePayDoTest.pm 
+
+tar cfvz box-ibs-2023-01-13-ad15d.tar.gz box-ibs-2023-01-13-ad15d
+
+
+unxz < test-recurent_reference_mastercard_nJ2efmxz.tar.gz | tar --delete ./api/src/Box/Api/JsonSchema/ProcessAuthorize.pm | xz > new-test-recurent_reference_mastercard_nJ2efmxz.tar.gz

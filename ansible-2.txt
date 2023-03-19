@@ -1,0 +1,95 @@
+Ansible -Automation Configuration Management Tools.
+
+Video
+https://www.youtube.com/watch?v=KsBb4ezQXq8
+6-Ansible - Правила создания файла Inventory
+
+1)Все сервера принадлежат двум группам 
+- all
+- ungrouped (не входят ни в одну группу ) или в свою группу.
+2) Ansible -case sensitive
+
+7-Ansible - Запуск Ad-Hoc Комманд
+ansible.conf
+[defaults]
+host_key_cheching = false
+inventory         = ./hosts.txt  
+hosts.txt
+
+[staging_servers]
+linuxS ansible_host=172.31.8.69 ansible_usr=user ansible_ssh_private_key_file=/home/ec2-user/.ssh/california-key1.pm
+[prod_servers]
+
+ansible all -m ping
+ansible all -m setup
+
+ansible all --inventory=192.168.233.19, -m ping \
+    --extra-vars "ansible_user=box ansible_password=qazxsw"
+
+ansible all --inventory=192.168.233.19, -m setup \
+    --extra-vars "ansible_user=box ansible_password=qazxsw"    
+
+# Выполнить команды на всех удаленных серверах
+ansible all -m shell -a 'date'   
+ansible all -m shell -a 'ls -l /home/box' -b
+
+# Copy  run command with sudo privileges, key  -b  
+ansible all -m copy -a 'src=privet.txt dest=/home/' -b
+# Delete file  
+ansible all -m file -a 'path=/home/privet.txt state=absent' -b
+# Download file  
+ansible all -m get_url -a 'url=https://*** dest=/home/box/' -b
+# Install
+ansible all -m yum -a 'name=stress state=installed' -b
+# Remove package
+ansible all -m yum -a 'name=stress state=removed' -b
+# Curl
+ansible all -m uri -a 'url=http://***' -b
+
+8-Ansible - Правила Формата YAML
+9-Ansible - Перенос переменных в group_vars
+ansible-inventory --list 
+
+
+10-Ansible - Первые Playbook
+В yml файлах кол-во пробелов в группах имеет значение.
+ansible-playbook playbook1.yml
+# Install Apache on all Web Server
+ansible-playbook playbook2.yml
+
+ ansible-playbook playbook2.yml --tags "copy_file"
+ ansible-playbook playbook2.yml --tags "remove_file, copy_file"
+
+--------------------------------------------------------------------------------------------------------
+Посмотреть время на всех серверах:
+ansible all -m shell -a 'date'
+CIB-Proxy | SUCCESS | rc=0 >>
+Fri May  6 10:58:42 +04 2022
+
+CIB-DB | SUCCESS | rc=0 >>
+Fri May  6 10:58:44 +04 2022
+
+CIB-App | SUCCESS | rc=0 >>
+Fri May  6 10:58:43 +04 2022
+
+cat ansible.cfg 
+[defaults]
+inventory = hosts
+roles_path = roles
+interpretor_python = auto
+host_key_checking = FALSE
+remote_user = ansible
+private_key_file = ~/.ssh/id_rsa
+
+[privilege_escalation]
+become=True
+become_method=sudo
+become_user=root
+become_ask_pass=False
+
+cat hosts
+[cib]
+CIB-DB             ansible_host=172.25.198.2           
+CIB-Proxy          ansible_host=172.25.198.3     
+CIB-App            ansible_host=172.25.198.4    
+ 

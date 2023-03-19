@@ -1,0 +1,18 @@
+https://webhamster.ru/mytetrashare/index/mtb339/1617704451p16x51cxnq
+1. Открыть панель команд: Ctrl+Shift+P (Cmd+Shift+P);
+2. Набрать settings.json, чтобы открыть файл конфигурации;
+3. Настроить рулеры, как удобно.
+"editor.rulers": [79]
+
+show terminal: x на нижней панели в левой части.
+
+visual studio
+plan text | json 
+Ctr+Shift+I - expand json 
+
+Убрать подсветку синтаксиса для javascript:
+Settings| Extensions | JSON | json validate enable
+или 
+defaultSettings.json
+	// Enable/disable JSON validation.
+	"json.validate.enable": true,

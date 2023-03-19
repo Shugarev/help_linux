@@ -1,0 +1,9 @@
+sudo ln -s /etc/nginx/sites-available/nginx-cnt /etc/nginx/sites-enabled/
+
+
+ln -s /home/box/boxplat/checkout/layouts/ibs box_checkout_layout
+ls -s /home/box/boxplat/backoffice-base/layouts/ibs box_layout
+
+ln -s [Source_File_Path] [Symbolic_Link_Path]
+ln -s [Source_Directory_Path] [Symbolic_Link_Destination_Path]
+

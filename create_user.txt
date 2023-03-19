@@ -1,0 +1,41 @@
+------------ubuntu 20---------------------
+# adduser box
+# usermod -aG sudo box
+# mkdir /home/box/.ssh
+
+# chown box:box /home/box/.ssh/
+# touch /home/box/.ssh/authorized_keys
+
+# chown box:box /home/box/.ssh/authorized_keys
+# chmod 0700 /home/box/.ssh
+# chomod 0600 /home/box/.ssh/authorized_keys
+#/etc/ssh/sshd_config  set PasswordAuthentication no in this config
+
+
+-------------------------------------
+umask 0022
+useradd -m -s /bin/bash box
+echo 'box:qazxsw' | chpasswd
+chmod 0755 /home/box
+chown box:box /home/box
+touch /etc/sudoers.d/box
+echo "box ALL=(ALL) NOPASSWD:ALL">>"/etc/sudoers.d/box"
+
+
+#/etc/ssh/sshd_config set PasswordAuthentication no
+sudo sed -i -e 's/^PasswordAuthentication yes/#PasswordAuthentication yes/; s/^#PasswordAuthentication no/PasswordAuthentication no/' /etc/ssh/sshd_config
+
+#su -l box -c 'pip install pexpect ptyprocess'
+
+sudo systemctl restart ssh
+sudo systemctl status ssh
+
+-----------------------------------------------------------------------
+
+su box
+mkdir ~/.ssh
+sudo apt install nano 
+
+nano ~/.ssh/authorized_keys
+-----------------------------------------------------------------------
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDRXuo76td7RYzpZiEg8rj7VzSTyA67c9gulIku76+ScZFCaW5cCHDstUNDawbo45KJwpLfr0AEoxrS7XmhXVrlc7oS2vTmwlSy5Ye9EmMvo+K2ElYqH8eNTGDNufX8uonWQl+G+lyeeDBZkjhAemg/ewXq/LcMy6AknNlOxtyg+/Kzg58bR5HBgMyWBa3gvYGQx6oBwNvTkvXD8BwR4KKtUfJnz8HwPrh3HYngowVdhi2tPCo/K1AvIJ9VKMYd4SZoUXBzi3fS5BlR4zxyHTVEM1eXCCL1rjVANjQrRmbEH1JedGta8YD8zgbIZfhdmLOYHllzp/W2yCnQjMyTqhwt sergey@s-notebook

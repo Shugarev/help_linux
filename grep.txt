@@ -1,0 +1,324 @@
+grep Output control:
+-r, --recursive              like --directories=recurse
+-R, --dereference-recursive  likewise, but follow all symlinks
+
+-i, --ignore-case         ignore case distinctions in patterns and data-c count 
+-n, --line-number         print line number with output lines-v, --invert-match        select non-matching lines
+-w, --word-regexp         match only whole words
+-x, --line-regexp         match only whole lines
+-v, --invert-match        select non-matching lines
+
+Context control:
+-B, --before-context=NUM  print NUM lines of leading context
+-A, --after-context=NUM   print NUM lines of trailing context
+-C, --context=NUM         print NUM lines of output context
+
+
+grep -E  "\"bad \(" data.csv | grep -E "2016-11-(0[3-9]|1[0-3])" | wc -l кол-во
+grep -сE  "\"good\"" data.csv | grep -E "\"2015-10-(0[1-9])"
+grep -R --include="*.R" "apply"
+grep -r --include=\*.{py,ipynb} "keras" 
+grep -R --include="*2018-07-11*" cross | grep -v "Wex"
+
+
+считает кол-во,если не и выводит одну строку выши и одну строку ниже
+grep -vnEC 1 "2016-11-(0[3-9]|1[0-3])" data.csv
+grep -vnEC 1 "\"(good|bad \()" data.csv
+
+
+
+grep "^good" data.csv поиск слова в начале предложения
+grep "fraud$" data.csv поиск слова в конце предложения
+grep "\"good" data.csv  слешим кавычки
+
+Строки в окрестностях искомой строки
+grep -nC 1 "vitxtaminka@yahoo.com" data.csv (одна строка выше и одна ниже, с номерами строк)
+grep -nA 1 "vitxtaminka@yahoo.com" data.csv одна строка снизу
+grep -nB 1 "vitxtaminka@yahoo.com" data.csv одна строка cверху
+
+grep  -E "\b[0-9]{1,3}(\.[0-9]{1,3}){3}\b" data.csv 
+
+Найти все слова, начинающиеся на @
+grep -Eo '@\S+'
+
+Найти все уникальные слова, начинающиеся на @
+grep -Eo '@\S+' | sort -u
+
+поиск \"
+grep '\\"' data.csv 
+
+поиск \'
+grep  "[\]'"  data.csv 
+
+так не работает!!!!! выводи все строки!!!!
+grep  "\\'" data.csv 
+
+Последний символ строки не кавычка!!!
+grep -v '"$' data.csv 
+
+Поиск строк с табуляцией
+grep -nP '\t' data.csv 
+
+Убираес строку с комментарием
+grep -E '\b[0-9]{1,3}(\.[0-9]{1,3}){3}\b' /etc/resolv.conf | grep -v '#'
+
+Отберём строки с заглавными символами:
+grep "[[:upper:]]" data.csv
+
+http://rus-linux.net/MyLDP/consol/sed.html
+http://najomi.org/_nix/sed
+https://habr.com/company/ruvds/blog/327530/
+https://habrahabr.ru/post/229501/
+http://proft.me/2011/09/17/grep-kollekciya-primerov-ispolzovaniya/
+
+
+Подсчет уникальных строк в файле
+sort -u data.csv | wc -l
+
+=========================================== awk ===============================================
+awk -F "\t" '{print "is_rebill="$2}' data.csv 
+awk -F ";" '{print "amount="$1",email="$10",Chargebacked="$5 }' data.csv 
+awk '{if(NR >150 && NR<2001){print NR,$0}}'  data.csv
+
+awk 'NR % 2 == 0' data.csv - печатает четные строки файла
+awk -F "\",\"" '{print "coountry="$9",state="$14 }' data.csv 
+awk -F : '{ if ($4 ~ /raghu/) print $1, $3, $4}' data.csv
+ls -l | column -t |  awk  '{print $8}'
+
+выводит 
+BEGIN { 
+        FS=":" 
+} 
+{ print $1 }
+
+====================================== sed ====================================================
+Overview of Regular Expression Syntax
+https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html
+
+https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
+https://www.geeksforgeeks.org/sed-command-linux-set-2/
+
+sed - stream editor for filtering and transforming text
+-n, --quiet, --silent   suppress automatic printing of pattern space
+-i[SUFFIX], --in-place[=SUFFIX]   edit files in place (makes backup if SUFFIX supplied)
+-e script, --expression=script    add the script to the commands to be executed
+
+Commands which accept address ranges:
+d  Delete pattern space.  Start next cycle.
+D  If pattern space contains no newline, start a normal new cycle as if the d command was issued.  
+Otherwise, delete text in the pattern space up to the first newline, and restart  cycle
+with the resultant pattern space, without reading a new line of input.
+
+s/regexp/replacement/   Attempt to match regexp against the pattern space.  
+If successful, replace that portion matched with replacement.  The replacement may contain the special character & to refer to that
+portion of the pattern space which matched, and the special escapes \1 through \9 to refer to the corresponding matching sub-expressions in the regexp.
+
+Replacing or substituting string 
+sed 's/unix/linux/' data.csv
+# linux is great os. unix is opensource. unix is free os.
+
+Replacing the nth occurrence of a pattern in a line : Use the /1, /2 etc flags to replace the first, second occurrence of a pattern in a line. 
+sed 's/unix/linux/' data.csv
+# unix is great os. linux is opensource. unix is free os.
+
+Replacing all the occurrence of the pattern in a line :
+sed 's/unix/linux/g' data.csv
+#linux is great os. linux is opensource. linux is free os.
+
+Replacing from nth occurrence to all occurrences in a line : Use the combination of /1, /2 etc and /g to replace 
+all the patterns from the nth occurrence of a pattern in a line. 
+sed 's/unix/linux/2g' data.csv
+#unix is great os. linux is opensource. linux is free os.
+
+Parenthesize first character of each word :
+echo "Welcome To The Geek Stuff" | sed 's/\(\b[A-Z]\)/\(\1\)/g'
+#(W)elcome (T)o (T)he (G)eek (S)tuff
+
+echo -e " # text NOPASSWD: text2\n text3 NOPASSWD: text4"  | sed -e 's/^\( *[^ #].*\)\(NOPASSWD:\)/\1/'
+ # text NOPASSWD: text2
+ text3  text4
+
+echo "proxy_read_timeout   60" | sed  's/proxy_read_timeout\s\+[0-9]\+/proxy_read_timeout 90 /g'
+#proxy_read_timeout 90
+echo "proxy_read_timeout   60" | sed -E 's/proxy_read_timeout\s+[0-9]+/proxy_read_timeout 90 /g'
+#proxy_read_timeout 90
+
+
+Replacing string on a specific line number 
+sed '3 s/unix/linux/' data.csv
+***
+***
+linux linux which one you choose.
+
+Duplicating the replaced line with /p flag : The /p print flag prints the replaced line twice on the terminal.
+If a line does not have the search pattern and is not replaced, then the /p prints that line only once.
+echo 'linux linux which one you choose.' | sed 's/linux/unix/p'
+#unix linux which one you choose.
+#unix linux which one you choose.
+
+Printing only the replaced lines : Use the -n option along with the /p print flag to display only the replaced lines. 
+Here the -n option suppresses the duplicate rows generated by the /p flag and prints the replaced lines only one time.
+echo -e 'linux \nunix \nwhich one you choose.' | sed -n 's/one/second/p'
+#which second you choose.
+
+
+Replacing string on a range of lines : You can specify a range of line numbers to the sed command for replacing a string.
+echo -e 'unix \nunix \nunix which one you choose.' | sed '1,3 s/unix/linux/'
+#linux 
+#linux 
+#linux which one you choose.
+
+Deleting lines from a particular file:
+# delete 5-th line, delete last line, delete lint from range 3 to 6 , delete from 12th to last line, elete pattern matching line
+sed '5d' data.csv
+sed '$d' data.csv
+sed '3,6d' data.csv
+sed '12,$d' data.csv
+sed '/abc/d' data.csv
+
+View/Print the files 
+from 3 to 8 range, except the given range, nth line of the file, from 3th line to end of file
+sed -n '3,8p' data.csv
+sed -n '2,4d' data.csv
+sed -n '4'p data.csv
+sed -n '3,$'p data.csv
+
+Pattern Printing 
+line only which matches the pattern,lines which matches the pattern i.e from input to xth line
+sed -n /every/p data.csv
+sed -n '/everyone/,5p' data.csv
+
+Prints lines from the xth line of the input, up-to the line which matches the pattern. 
+If the pattern doesn’t found then it prints up-to end of the file. 
+Syntax: sed -n ‘x,/pattern/p’ filename 
+
+Print the lines which matches the pattern up-to the next xth lines –
+sed -n '/learn/,+2p' a.txt
+
+
+меняет во всех строках файла
+sed -i 's/""Payment Center""/"Payment-Center"/g'  data.csv
+
+Если найден "boom", заменить aaa на bb
+sed '/boom/s/aaa/bb/' data.csv
+
+Изменяет только первое соответствие
+sed '0,/RE/s//to_that/' data.csv
+
+
+Для выполнения нескольких действий с данными, используйте ключ -e при вызове sed. Например, вот как организовать замену двух фрагментов текста:
+sed -e 's/This/That/; s/test/another test/' data.csv
+
+str0='\\"'
+str1="\\'"
+echo  '"Commercial Bank \"Privatbank\"",' | sed 's/'$str0'/'$str1'/g'
+echo  '"Commercial Bank \"Privatbank\"",' | sed 's/\\"/\\'\''/g'
+echo  '"Commercial Bank \"Privatbank\"",' | sed  's/\\"/\\\x27/g'
+
+кодировка utf8
+' => 0x27
+" => 0x22
+\ => 0x5C
+
+добавляет строку в начало файла
+sed -i "1s/^/${file_header}\n/" data.csv
+
+Удаляет последнюю строку
+sed '$d' data.csv
+
+Удаляет все строки, начиная с 17-й, до "disk". Если строк с "disk" несколько, удаляет до первой из них.
+sed '17,/disk/d' data.csv
+
+Удалить все начальные пустые строки
+sed '/./,$!d' data.csv
+
+Удалить все замыкающие пустые строки
+sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' data.csv
+
+Если строка заканчивается обратным сплешем, соединить ее со следующей (полезно для скриптов оболочки)
+sed -e :a -e '/\\$/N; s/\\\n/ /; ta' data.csv
+
+Удаляет строку с первым соответствием
+sed '0,/RE/{//d;}' data.csv
+
+Заескейпить активные метасимволы оболочки двумя ковычками
+sed 's/\([\\`\\"$\\\\]\)/\\\1/g'
+
+Убрать комментарии и пустые строки
+sed '/ *#/d; /^ *$/d'
+
+Соединить строки (линии) с предшествующим \
+sed ':a; /\\$/N; s/\\\n//; ta'
+
+#https://stackoverflow.com/questions/91110/how-to-match-a-single-quote-in-sed
+#'texta'\''textb' (APOSTROPHE text APOSTROPHE, then REVERSE SOLIDUS, APOSTROPHE, then APOSTROPHE more text APOSTROPHE)
+
+*********************************************
+regular expression with condition
+reg=r'(?<!^)(#(?:[\da-f]{3}){1,2})'
+reg=r'(?<!^)(#(?:[\da-f]{3}){1,2})'
+
+(?< условие до искомого паттерна)
+(?= условие после искомого паттерна)
+pattern = '(?<=[a-z])"(?=[a-z])' маленькая буква до двойной кавычки, двойная кавычка, маленькая буква после двойной кавычки
+import re
+pattern = '(?<=[a-z])"(?=[a-z])'
+line = '"RUS","542350","Joint Stock \"West-siberian Com","2016-06-03"'
+clear_line = re.sub(pattern, "'", line) 
+====================================== cut ====================================================
+-b, --bytes=LIST        select only these bytes
+-c, --characters=LIST   select only these characters
+опция -b работает с байтами, а опция работает с символами 
+
+echo -e 'Andhra Pradesh\nArunachal Pradesh' |  cut -b 1,2,5
+#Anr
+#Ara
+List with ranges:
+echo -e 'Andhra Pradesh\nArunachal Pradesh' | cut -b 1-3,5-7 
+#Andra 
+#Aruach
+
+================================================================================
+grep  -R --include=\*.pm '^use ' | awk -F ' ' '{  print $2}' | sort -u
+
+echo 'patch.file
+        tmp.tar.gz
+        vs' | xargs
+
+Посмотрел код проекта https://git.smarthomedevs.work/shield/shield-deploy
+В проекте используется только параметр geoip::db ( для резолвинга )
+shield-deploy/profile/configs/config.ini
+***
+[geoip]
+db= ***GeoIP.dat
+Эта параметр и соответственно база (GeoIP.dat) используется для резолвинга по ip полей в машинном обучении 
+Почитал packages/machine-learning/README В этом файле тоже нет упоминания о параметре db_isp.
+Возможно параметро db_isp в проекте не используется.
+Возможно когда то задумывалось, что через GeoIPISP.dat будут резолвится интеренет провайдеры.
+(isp провайдер)
+
+Прочитал две базы которые у себя нашел GeoIP.dat и GeoIPISP.dat 
+метод  isp_by_addr
+GeoIPISP.dat резолвит интернет провайдера, а база GeoIP.dat всегда возвращает пустое значение.
+
+метод record_by_addr
+GeoIPISP.dat резолвит странные данные(или база устарела или не предназначена) , 
+а база GeoIP.dat резолвит данные похожие на правильность.
+
+echo "proxy_read_timeout   60" | sed  's/\d/digit/g'
+
+echo "proxy_read_timeout   60" | sed  's/proxy_read_timeout\s\+[0-9]\+/proxy_read_timeout 90 /g'
+
+echo "proxy_read_timeout   60" | sed -E 's/proxy_read_timeout\s+[0-9]+/proxy_read_timeout 90 /g'
+
+
+
+==============Удалить======================
+echo  -e "62027935\n62028141\n62028142" | sed 's/.*/"&"/' |  sed ':a;N;$!ba;s/\n/,/g' | sed 's/.*/(&")/'
+("62027935","62028141","62028142"")
+
+
+ echo  -e "62027935\n62028141\n62028142" | paste -s -d, -
+
+
+find . -maxdepth 1 -exec grep foo {} \;

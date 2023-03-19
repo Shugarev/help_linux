@@ -1,0 +1,3 @@
+screen ssh ibs@80.240.130.161 -i ~/.ssh/serg/id_rsa
+
+screen  

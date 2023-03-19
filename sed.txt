@@ -1,0 +1,136 @@
+https://linuxhint.com/50_sed_command_examples/#s5
+
+sed
+  -i[SUFFIX], --in-place[=SUFFIX]
+                 edit files in place (makes backup if SUFFIX supplied)
+-e script, --expression=script
+                 add the script to the commands to be executed
+-n, --quiet, --silent
+                 suppress automatic printing of pattern space
+-------------------------------------------------------------------
+* - любой символ, любое количество;
+\+ - как звездочка, только один символ или больше;
+\? - нет или один символ;
+\{i\} - любой символ в количестве i;
+\{i,j\} - любой символ в количестве от i до j;
+\{i,\} - любой символ в количестве от i и больше.
+
+# - комментарий, не выполняется;
+q - завершает работу сценария;
+d - удаляет буфер шаблона и запускает следующую итерацию цикла;
+p - вывести содержимое буфера шаблона;
+n - вывести содержимое буфера шаблона и прочитать в него следующую строку;
+s/что_заменять/на_что_заменять/опции - замена символов, поддерживаются регулярные выражения;
+y/символы/символы - позволяет заменить символы из первой части на соответствующие символы из второй части;
+w - записать содержимое буфера шаблона в файл;
+N - добавить перевод строки к буферу шаблона;
+D - если буфер шаблона не содержит новую строку, удалить его содержимое и начать новую итерацию цикла, иначе удалить содержимое буфера до символа перевода строки и начать новую итерацию цикла с тем, что останется;
+g - заменить содержимое буфера шаблона, содержимым дополнительного буфера;
+G - добавить новую строку к содержимому буфера шаблона, затем добавить туда же содержимое дополнительного буфера.
+
+
+Если вам надо записать результат замены в обратно в файл можно использовать стандартный
+ оператор перенаправления вывода > или утилиту tee. Например:
+sed '/^#\|^$\| *#/d' /etc/apache2/apache2.conf | sudo tee /etc/apache2/apache2.conf
+
+Также можно использовать опцию -i, тогда утилита будет выполнять изменения в переданном ей файле:
+sudo sed -i '/^#\|^$\| *#/d' /etc/apache2/apache2.conf
+
+выводит строки 12-18
+sed -n 12,18p  allnew-test-full.csv
+sed -n 1657,1657p  data-full.arff
+
+Удалить все пустые строчки
+sed '/^#\|^$\| *#/d' /etc/apache2/apache2.conf
+
+замена через sed
+#https://stackoverflow.com/questions/91110/how-to-match-a-single-quote-in-sed
+#'texta'\''textb' (APOSTROPHE text APOSTROPHE, then REVERSE SOLIDUS, APOSTROPHE, then APOSTROPHE more text APOSTROPHE)
+str0='\\"'
+str1="\\'"
+
+echo  '"Commercial Bank \"Privatbank\"",'
+echo  '"Commercial Bank \"Privatbank\"",' | sed 's/'$str0'/'$str1'/g'
+echo  '"Commercial Bank \"Privatbank\"",' | sed 's/\\"/\\'\''/g'
+echo  '"Commercial Bank \"Privatbank\"",' | sed  's/\\"/\\\x27/g'
+
+кодировка utf8
+' => 0x27
+" => 0x22
+\ => 0x5C
+
+# add line to top
+sed -i -e '1iaddress,amount,card_type\' my-file.txt 
+
+меняет во всех строках файла
+sed -i 's/""Payment Center""/"Payment-Center"/g'  ${file_end} 
+
+добавляет строку в начало файла
+sed -i "1s/^/${file_header}\n/" ${file_end}
+
+Выводит только строки 12-18 файла file.txt
+sed -n 12,18p file.txt
+
+Выводит весь файл file.txt за исключением строк с 12 по 18
+sed 12,18d file.txt
+
+Если найден "boom", заменить aaa на bb
+sed '/boom/s/aaa/bb/' file.txt
+
+Удаляет последнюю строку
+sed '$d' file.txt
+
+Удаляет все строки, начиная с 17-й, до "disk". Если строк с "disk" несколько, удаляет до первой из них.
+sed '17,/disk/d' file.txt
+
+Удалить все начальные пустые строки
+sed '/./,$!d' file.txt
+
+Удалить все замыкающие пустые строки
+sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' file.txt
+
+Если строка заканчивается обратным сплешем, соединить ее со следующей (полезно для скриптов оболочки)
+sed -e :a -e '/\\$/N; s/\\\n/ /; ta' file.txt
+
+Удаляет строку с первым соответствием
+sed '0,/RE/{//d;}' file.txt
+
+Изменяет только первое соответствие
+sed '0,/RE/s//to_that/' file.txt
+
+Заескейпить активные метасимволы оболочки двумя ковычками
+sed 's/\([\\`\\"$\\\\]\)/\\\1/g'
+
+
+Убрать комментарии и пустые строки
+sed '/ *#/d; /^ *$/d'
+
+Соединить строки (линии) с предшествующим \
+sed ':a; /\\$/N; s/\\\n//; ta'
+
+Для выполнения нескольких действий с данными, используйте ключ -e при вызове sed. Например, вот как организовать замену двух фрагментов текста:
+sed -e 's/This/That/; s/test/another test/' ./myfile
+
+
+
+20. If there is a match in the line insert a line after that line
+sed 's/Linux/&\nUbuntu/' os.txt
+
+11. Add string before and after the matching pattern using ‘\1’
+
+echo "Bash language" | sed  's/\(Bash\)/Learn \1 programming/'
+
+
+-------------------remove ------------------
+str="| 59 | admin2 | 87ed38ff426f9c1e94955984da15f8b037fc1a86 |"
+echo $str | sed 's/ //g' | sed 's/|\(.*\)|/\1/' | sed 's/|/,/g'
+
+
+str="| id | login  | password                                 | email  |"
+echo $str | sed 's/ //g' | sed 's/|\(.*\)|/\"\1\"/' | sed 's/|/\`,\`/g'  
+
+str="| 59 | admin2 | 87ed38ff426f9c1e94955984da15f8b037fc1a86 | 1@3.ua"
+echo $str | sed 's/ //g' | sed 's/|\(.*\)|/\"\1\"/' | sed 's/|/\",\"/g'  
+
+str="| 59 | admin2 | 87ed38ff426f9c1e94955984da15f8b037fc1a86 | 1@3.ua | 2022-03-29 13:49:34 | admin |       1 |           0 | q    | 2022-03-29 13:49:34 |                        1 | *        | ru       | 0000-00-00 00:00:00 |        0 | 0000-00-00 00:00:00 |"
+echo $str  | sed 's/ //g' | sed 's/|\(.*\)|/\1/' | sed 's/|/,/g'

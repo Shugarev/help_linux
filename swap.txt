@@ -1,0 +1,67 @@
+ Включили файл подкачки
+https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04-ru
+
+sudo swapon --show
+free -h
+df -h
+
+sudo fallocate -l 1G /swapfile
+ls -lh /swapfile
+sudo chmod 600 /swapfile
+ls -lh /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo swapon --show
+sudo cp /etc/fstab /etc/fstab.bak
+
+echo '/swapfile none swap sw 0 0' | free -h
+
+cat /proc/sys/vm/swappiness
+
+Проверить кол-во испоьзуемого swap в процессе выполнения:
+swapon
+NAME      TYPE SIZE USED PRIO
+/swapfile file   2G 1.1G   -2
+
+
+#sudo nano /etc/sysctl.conf
+
+Удалить 
+sudo swapoff /swapfile
+sudo rm  /swapfile
+
+sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
+#4096+0 records in
+#4096+0 records out
+#4294967296 bytes (4.3 GB, 4.0 GiB) copied, 10.0871 s, 426 MB/s
+sudo chmod 600 /swapfile
+
+-----------------------------------------------centos7----------------------------------
+https://www.8host.com/blog/kak-dobavit-swap-na-centos-7/
+
+swapon -s
+df -h
+#sudo fallocate -l 2G /swapfile
+#ls -lh /swapfile
+#sudo chmod 600 /swapfile
+#ls -lh /swapfile
+
+#sudo swapon /swapfile
+#error
+#swapon: /swapfile: swapon failed: Invalid argument
+
+
+Вместо sudo fallocate -l 1G /my-swap-file 
+sudo dd if=/dev/zero of=/swapfile bs=2MiB count=1000
+#of: указывает файл или устройство назначения назначения.
+#bs: количество байт, которые будут записаны или прочитаны за раз.
+#count: Копирует только указанное число входных блоков.
+
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+#Setting up swapspace version 1, size = 1023996 KiB
+#без метки, UUID=bb94e86e-c1d2-4b5a-8cc2-fdffd2078d7e
+sudo swapon /swapfile
+
+sudo cp /etc/fstab /etc/fstab.bak
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab

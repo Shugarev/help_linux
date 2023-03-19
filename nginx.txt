@@ -1,0 +1,192 @@
+http://nginx.org/ru/docs/http/ngx_http_ssl_module.html#var_ssl_client_verify
+
+sudo apt-get install nginx
+
+Чиним сервис nginx
+sudo systemctl unmask nginx.service
+
+sites-available - содержит конфиг файлы
+sites-enabled - содержит simlinks на конфиг файлы
+
+sudo ln -s /etc/nginx/sites-available/example.com.conf /etc/nginx/sites-enabled/
+
+sudo ln -s /etc/nginx/sites-available/nginx-mnlq /etc/nginx/sites-enabled/
+
+sudo ln -s /etc/nginx/sites-available/nginx-cnt /etc/nginx/sites-enabled/
+
+Проверяем конфиги nginx
+sudo nginx -t
+
+# Путь к nginx
+which nginx
+
+Рестартуем nginx
+sudo systemctl restart nginx
+
+sudo nano /etc/nginx/sites-available/example.com.conf
+
+add nginx repository:
+sudo apt-add-repository -y ppa:hda-me/nginx-stable
+
+просмотреть текст ssl сертификата
+https://regery.ua/ru/security/ssl-tools/certificate-decoder
+
+log files:
+access_log /var/log/nginx/api-box-test.moneliq.virt-access.log;
+error_log /var/log/nginx/api-box-test.moneliq.virt-error.log;
+
+
+sudo apt install nginx
+файлы конфигурации /etc/nginx/
+приоритет: стартовый конфиг файле /etc/nginx/nign.conf подлключется директория /etc/nginx/conf.d/ 
+дополнительно могут подключатся директории  /etc/nginx/sites-available/ и /etc/nginx/sites-enabled
+
+sudo systemctl start nginx
+
+
+# App id
+167.172.36.139 moneliq.virt
+167.172.36.139 
+167.172.36.139 merchant-box-test.moneliq.virt
+167.172.36.139 checkout-box-test.moneliq.virt
+167.172.36.139 api-box-test.moneliq.virt    
+
+
+ss -nltp - показывает информацию по портам
+директивы - конкретные опции в конфигурации.
+Контекст - разделы в файлах конфигурации.
+
+
+
+-----------------------------------------------------------------------------------------
+https://admin-box-test.moneliq.virt/
+Ошибка
+400 Bad Request
+No required SSL certificate was sent
+
+
+nginx-mnlq
+***
+server {
+    server_name admin-box-test.moneliq.virt;
+    ***
+    listen 443 ssl;
+    # серверные сертификаты
+    ssl_certificate /etc/nginx/box_certs/admin/self.crt;
+    ssl_certificate_key /etc/nginx/box_certs/admin/self.key;
+    # клиентские сертификаты, у нас обычно клиентский сертификат совпадает с серверным.
+    ssl_client_certificate /etc/nginx/box_certs/admin/self.crt;
+    ssl_verify_client on;
+
+
+
+Сретификат в браузер я подложил    
+
+После очистки cash и reboot бразузе сертификат 
+при загрузке 
+https://admin-box-test.moneliq.virt/
+запросило сертификат и получил ту же ошибку
+400 Bad Request
+No required SSL certificate was sent
+nginx/1.14.0 (Ubuntu)
+
+Я правильно понимаю, что нужно вполнить curl запрос с локальной машины на proxy машину с ключом
+--cacert <путь к cacert.pem> ?
+
+
+curl -v -k https://10.110.0.5 -H "Host: admin-box-test.moneliq.virt" --cacert self.crt
+
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt" --cacert tech.p12
+
+
+
+~/profile/certs/admin/db/keys
+tech.crt
+tech.key
+
+#curl -v https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt" --key tech.key --cacert tech.crt
+#curl -v https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt" --proxy-key tech.key --proxy-cert tech.crt
+
+
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt" --key tech.key --cert tech.crt
+
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt"  --key ./tech.key --cert ./tech.crt
+
+
+Внутренние ip:
+box@ubuntu18-app  ssh box@10.110.0.5
+ubuntu18-proxy    ssh box@10.110.0.3  
+ubuntu18-control  10.110.0.4
+ubuntu18-db       ssh box@10.110.0.2
+
+UPDATE user SET password_updated = '2022-01-30 12:59:08';
+
+----------------------------------------------------------------------------------------------------------
+sudo mkdir sites-available sites-enabled
+sites-enabled - содержит симлинки на файлы конфигурации
+
+touch  /etc/nginx/sites-available/nginx-cib
+
+sudo ln -s /etc/nginx/sites-available/nginx-cib /etc/nginx/sites-enabled/
+
+В nginx.conf в секцию 
+http {
+***
+include /etc/nginx/sites-enabled/*;
+
+Главный админ генерируются корневой ключ и сертификат.
+Для каждого домена генерирует серверный сертификат, который подписывается корневым сертификатом.
+
+
+# Внешний сертификаты
+ssl_certificate /etc/nginx/box_certs/admin/admin.crt;
+ssl_certificate_key /etc/nginx/box_certs/admin/admin.key;
+
+# Внутренний клиентский сертификат
+ssl_client_certificate /etc/nginx/box_certs/admin/self.crt;
+
+Пример: 
+приложение и база данных. Нужно шифровать трафик. Когда приложение крутится
+Приложение получает серверный сертификат.
+
+Прокси полностью принимает запрос и проверяет валидность и отправляет 
+
+Корневой - удостоверяющий центр сертификации.
+
+Каждый сертификат привязат к домену.
+
+сертификат прописывается на local, а alias прописываются ip.
+wild card - один сертификат на все точки входа. ( admin.org.com, merchant.org.com) 
+
+По умолчанию сертификат имеет все возможности 
+У серверного сертификата должна быть возможност подписывать и авторизовывать другие сертификаты.
+Для бокса клиентский и серверный сертификаты совпадают.
+
+Пока в боксе 4-е точки доступа. Для каждой точки доступа:
+Серверный сертификат нужен для идентификации клиента
+(клиент подложил свой сертификат(tech.p12) в браузер и пробует зайти, тогда данные браузерного серта сверяются с данными серверного сертификата)
+ 
+Клиентски сертификат для точки доступа admin например нужен для того, чтобы определить есть ли доступ из админки в другие точки входа:
+такие как merchant,checkout, api
+
+
+
+Писала в саппорт, но думаю, вас єто больше касается
+ibs столкнулись с проблемой
+Мы отключили ipv6 на сервере приложений после чего перестал запускаться nginx. 
+Решили проблему комментированием 23 строчки в файле /etc/nginx/sites-enabled/default
+listen [::]:80 default_server;
+Учтите это пожалуйста в инсталяционном скрипте
+
+
+http://nginx.org/ru/docs/http/ngx_http_ssl_module.html#var_ssl_client_verify
+# переменные показывают кол-во дней до даты окончания сертификата
+$ssl_client_v_end
+$ssl_client_v_remain
+
+
+   104	        proxy_read_timeout 60;
+   168	        proxy_read_timeout 60;
+   189	        proxy_read_timeout 60;
+   253	        proxy_read_timeout 60;
+sed -i 's/proxy_read_timeout 60/proxy_read_timeout 130/g' /etc/nginx/sites-available/box

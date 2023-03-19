@@ -1,0 +1,12 @@
+https://losst.ru/ustanovka-ubuntu-20-04
+reinstall ubuntu
+
+https://omgubuntu.ru/kak-pierieustanovit-ubuntu-v-riezhimie-dvoinoi-zaghruzki-ili-odinochnoi-zaghruzki/
+install ubuntu
+
+
+make backup
+https://pingvinus.ru/program/timeshift
+Поставил backup -2а раза в месяц
+Path to backup:
+/run/timeshift/backup/timeshift/snapshots

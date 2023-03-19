@@ -1,0 +1,23 @@
+nano - editor
+ctr + x Quit and Save
+press yes.
+
+ctr+o or F2 - Save 
+ctr+w - Find
+ctr+/ -replaced word
+
+
+Ctrl+K or F9   - cut current line
+Ctrl+U or F10  - insert line from buffer
+F3 -quit
+
+Alt+A	Start select test 
+Alt+6	Copy selected text
+
+nano + 158 sys.log - open file sys.log at 158 line.
+nano -B sys.log -  open file sys.log and save backup file.
+
+Alt + Shift + 3 - show line number 
+
+# show end of line
+cat -e box.conf

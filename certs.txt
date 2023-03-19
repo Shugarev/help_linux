@@ -1,0 +1,123 @@
+https://firstssl.ru/faq/%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B5-%D0%B2%D0%BE%D0%BF%D1%80%D0%BE%D1%81%D1%8B/%D0%BA%D0%B0%D0%BA-%D0%BA%D0%BE%D0%BD%D0%B2%D0%B5%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-ssl-%D1%81%D0%B5%D1%80%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82-%D0%B2-%D0%BD%D1%83%D0%B6%D0%BD%D1%8B%D0%B9-%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82
+
+Сертификаты бывают клиентски и серверные
+****
+Клиентский SSL сертифика
+
+.key - для приватного ключа
+.csr - для запроса на подпись сертификата
+.pem - для сертификата в Privacy Enchanced Mail формате. Записывается в base64 между -----BEGIN CERTIFICATE----- и -----END CERTIFICATE-----. 
+Также существует Distinguished Encoding Rules (DER) формат, где информация хранится как binary.
+p12 - для хранилища ключей с сертификатами (keystore) и хранилища доверенных сертификатов (truststore) в формате Public-Key Cryptography Standards 12.
+
+После разворачивания Box сертификаты лежать в директории
+box@ubuntu18-app:~/profile/certs
+
+~/profile/certs/admin/db/keys: лежат самоподписанный сертификат и ключ.
+tech.crt ~ одновременно сертификат для клиента и для сайта(ssl_certificate ssl_client_certificate - для двух деректив)
+tech.key
+
+tech.p12 - клиентский сертификат
+Нажать на замочек и посмотреть серверный сертификат.
+
+В папке certs/admin у меня такие сертификаты:
+ca.key   -> BEGIN RSA PRIVATE KEY
+ca.req   -> BEGIN CERTIFICATE REQUEST
+self.crl -> BEGIN X509 CRL   
+self.crt -> BEGIN CERTIFICATE  серверный
+self.key -> BEGIN PRIVATE KEY  серверный
+
+1) Я правильно понимаю, что в ini файл мы указали  путь к месту
+где будут хранится сгенерированные сертификаты?
+domain_admin=admin-box-test.moneliq.virt
+behind_proxy_cert_admin=/home/box/profile/certs/admin/self.crt
+behind_proxy_key_admin=/home/box/profile/certs/admin/self.key
+
+2) Конфиг nginx для внешнего прокси(файл назвали nginx-mnlq).
+Я правильно понимаю, что нужно указывать путь только для self.crt ?
+***
+listen 443 ssl; 
+ssl_client_certificate /etc/nginx/box_certs/admin/self.crt;
+ssl_verify_client on;
+
+3) nginx-mnlq полжить в папку /etc/nginx/sites-available
+ссылку на него положить в папку /etc/nginx/sites-enable
+
+4) где взять браузерный сертификат?
+
+5) Я правильно понимаю, что  tech.p12 в папке runtime сертификат для захода на прокси?
+
+
+Гуглим ошибу
+no "ssl_certificate" is defined in server listening on SSL port while SSL handshaking
+- удалить все link из /etc/nginx/sites-enable . Был один default удалили не помогло.
+- Проверить кто еще может слушать 403 порт.  sudo netstat -tulnp
+Видим, только nginx.
+
+==========================================================================================================================
+Это сертификаты сайта а не клиентские сертификаты!
+ssl_certificate /etc/nginx/box_certs/admin/self.crt;
+ssl_certificate_key /etc/nginx/box_certs/admin/self.key;
+
+На app-машине клиентские сертификаты лежат в:
+/home/box/profile/certs/admin/db/keys
+- tech.crt
+- tech.key
+
+рабочий запросы 
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.connectum.virt"  --key tech.key --cert tech.crt
+curl -v -k https://admin-box-test.connectum.virt   --key tech.key --cert tech.crt
+
+cert_pasw=o72ttbUAP9vE
+cert_path=$HOME/digitalocean-doc/connectum/runtime/tech.p12
+curl -v -k https://admin-box-test.connectum.virt  --cert-type P12 --cert "${cert_path}":"${cert_pasw}"  
+
+Для api запросов на App машине нужно:
+Для проекта созадать api пользователя с паролем и сгенерировать для него сертификат.
+Сохранить сертификат и пароль к сертификату
+Сертификаты генерятся в /home/box/profile/certs/api/db/
+certs/userapi.p12
+newcerts/01.pem
+keys/
+userapi.crt
+userapi.csr
+userapi.key
+
+
+
+api user:userapi
+api user pass:qazxsw12
+cert_pasw=rNPZ3+A9oOPo
+cert_path=$HOME/digitalocean-doc/connectum/api-cert/userapi.p12
+
+# PING
+curl -k -v -X GET -H 'Content-Type: application/json' --cert-type P12 --cert "${cert_path}":"${cert_pasw}"  https://userapi:qazxsw12@api-box-test.connectum.virt/ping
+
+# Authorize
+curl -vvv -k -X POST -H 'Content-Type: application/json' --user "${user}:${pass}" -d '{
+"amount" : '${amount}',
+"card" : {
+"expiration_month" : 12,
+"expiration_year" : 2024,
+"holder" : "John Smith",
+"cvv": "123"
+},
+"location" : {
+"ip" : "6.6.6.6"
+},
+"pan" : "'${pan}'"
+}' 'https://api-box-test.connectum.virt/orders/authorize' --cert-type P12 --cert "${cert_path}":"${cert_pasw}"  
+
+
+===================================================================================================
+FireFox cert:( удалить серты)
+Certificate Manager |Authentication Decisions | удалить серт для сайта
+https://secured-sandbox.cibpay.co/   
+| замочек | Connection not Secure | More information | View Certificate 
+
+===================================================================================================
+для box сертификаты в директории 
+etc/docker/certs.d/registry.smarthomedevs.work
+sh.cert
+sh.key
+

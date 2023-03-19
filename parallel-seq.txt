@@ -1,0 +1,8 @@
+https://zalinux.ru/?p=2623
+
+sudo apt install parallel
+
+seq 5 | parallel -n0 -j0 "curl  -X GET -k  -i "https://checkout.box.local:5443/qr/complete/72914535394874080" "
+
+
+seq 3 | parallel  -n0 -j0 "/home/sergey/box/shell-scripts/api_orders_authorize.sh"

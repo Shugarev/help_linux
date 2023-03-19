@@ -1,0 +1,90 @@
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.moneliq.virt"  --key tech.key --cert tech.crt
+
+-v, --verbose Make the operation more talkative( -vvv для более подробного вывода)
+-H, --header  <header/@file> Pass custom header(s) to server 
+-X, --request <command> Specify request command to use,(POST,GET,PUT,UPDATE. Default - GET)
+-k, --insecure      Allow insecure server connections when using SSL 
+-o, --output <file> Write to file instead of stdout
+-i, --include       Include protocol response headers in the output
+
+-E, --cert <certificate[:password]> Client certificate file and password
+--cert-type <type> (TLS) Tells curl what certificate type the provided certificate is in. PEM, DER and ENG are recognized types.  
+If not specified, PEM is assumed.
+If this option is used several times, the last one will be used
+
+--key <key>     Private key file name
+--cacert <file> CA certificate to verify peer against
+
+-u, --user <user:password>
+-d, --data <data>
+--data-urlencode <data> HTTP POST data url encoded
+(HTTP)  Sends  the  specified data in a POST request to the HTTP server, in the same way that a browser does when a user has
+filled in an HTML form and presses the submit button. This will cause curl to pass the data to the server using the content-
+type application/x-www-form-urlencoded.  Compare to -F, --form.
+
+
+
+curl  -v -k -o /dev/null https://merchant-paystageapp.accelpayments.ru   --cert-type P12 --cert merchant1.p12:3yVkWtDSqK6R 
+
+"Host: admin-box-test.moneliq.virt"
+Ключ Host в заголовке предназначен для того, чтобы понять куда перенаправлять запросы.
+
+E, --cert <certificate[:password]> Client certificate file and password
+tech.crt - клиентский сертификат сайта
+--key <key>     Private key file name
+tech.key - ключ к клиентскому сертификату сайта
+
+curl -v -k https://167.71.11.154 -H "Host: admin-box-test.connectum.virt"  --key tech.key --cert tech.crt
+curl -v -k https://admin-box-test.connectum.virt   --key tech.key --cert tech.crt
+
+cert_pasw=o72ttbUAP9vE
+cert_path=$HOME/digitalocean-doc/connectum/runtime/tech.p12
+curl -v -k https://admin-box-test.connectum.virt  --cert-type P12 --cert "${cert_path}":"${cert_pasw}"  
+
+
+cert_pasw=rNPZ3+A9oOPo
+cert_path=$HOME/digitalocean-doc/connectum/api-cert/userapi.p12
+curl -k -v -X GET -H 'Content-Type: application/json' --cert-type P12 --cert "${cert_path}":"${cert_pasw}"  https://userapi:qazxsw12@api-box-test.connectum.virt/ping
+
+curl -v POST -H 'Content-Type: application/json' -H "Host: api-paystageapp.accelpayments.ru" \
+--user 'apiuser:asdQWE123!@#' \
+--cert-type P12 --cert /home/sergey/Downloads/apiuser.p12:VzGvsPnxB94z \
+ -d '{"amount" : 450.20,"currency": "USD", "pan": "4111111111111111","card": {"expiration_month": 12,"expiration_year": 2024,"holder": "John Smith","cvv": "123"},"location" : {"ip" : "6.6.6.6"},"merchant_order_id": "67293046453879935"}' \
+  'https://api-paystageapp.accelpayments.ru/orders/authorize'
+
+
+curl -X POST \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+-i 'https://ecomm.elpay.kg:3443/ecomm2/MerchantHandler' \
+--cacert /etc/pki/ca-trust/source/anchors/ecomm-IPC.crt \
+--cert ./MCertResp_IA200001.pem  \
+--key ./ima_IA200001.key \
+--data 'amount=12750&client_ip_addr=8.8.8.8&command=v&currency=417&description=&language=en&msg_type=SMS'
+
+
+curl -v -k POST -H 'Content-Type: application/json'  \
+--user 'azc.api.demo:d20e10m22o' \
+-d '{"amount" : 450.20,"currency": "USD", "pan": "4111111111111111","card": {"expiration_month": 12,"expiration_year": 2024,"holder": "John Smith","cvv": "123"},"location" : {"ip" : "6.6.6.6"}}' \
+'https://api.demo.boxplat.com:5443/orders/authorize'
+
+
+
+
+# чтобы сокс сделать
+ssh -D 8080 sergey@164.92.163.38
+# curl proxy через socks
+curl -k --socks5 localhost:8080 --user 'api-test:qazxsw' -X POST \
+"https://api.fraud.tokenpay.stg:5443/orders/" -H  \ 
+"accept: application/json" -H  "Content-Type: application/json" \ 
+-d '{"merchant_order_id":"fba47d01-4417-4751-8e85-1a9025e33646","amount":"9.99",
+"client":{"address":"Main ave. 1","city":"San Francisco","country":"USA",
+"email":"foo@bar.com","name":"John Smith","phone":"+1 456 890456","state":"CA",
+"zip":"NW1 6XE"},"location":{"ip":"8.8.8.8"},"card":
+{"masked_number":"676259****1111","expiration_month":"10","expiration_year":"2040",
+"holder":"John Doe","hash":"18EDE5531DD20E849382DDF6BBA605F6"},"http_headers":
+{"user_agent":"Googlebot/2.1 (+http://www.google.com/bot.html)","accept":"text/html,
+application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","accept_encoding":"gzip, 
+deflate, br","accept_language":"en-US,en;q=0.5"},"segmentation":
+{"segment_id":"F152516615EFD05CF4B4903B03D4A45D","merchant_id":"F152516615EFD05CF4B4903B03D4A45D",
+"shop_id":"1323D4C0C9EFA9A9C17EA8FF40461559"},"device":"eyJmb28iOiJiYXIifQ==",
+"extra":{"foo":"bar","baz":"foo"}}'

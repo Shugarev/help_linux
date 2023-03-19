@@ -1,0 +1,88 @@
+https://access.redhat.com/sites/default/files/attachments/rh_yum_cheatsheet_1214_jcs_print-1.pdf
+
+sudo yum install <package name>-<version info>
+
+[ansible@cib-deploy ~]$  ls -l /etc/yum.repos.d/
+total 20
+-rw------- 1 root root  126 Apr 22 15:44 ansible.repo
+-rw-r--r-- 1 root root 1457 Sep  4  2021 epel-testing.repo
+-rw-r--r-- 1 root root 1358 Apr 22 15:45 epel.repo
+-rw------- 1 root root  170 Apr 22 15:45 heanet.repo
+-rw-r----- 1 root root  358 Jan 25  2021 redhat.repo
+
+[ansible@cib-app ~]$  ls -l /etc/yum.repos.d/
+total 28
+-rw-r--r-- 1 root root  463 Nov 13 20:40 aeris.repo
+-rw-r----- 1 root root  222 May  4 18:21 centos-rhel7.repo
+-rw-r--r-- 1 root root 1050 Oct  2  2017 epel-testing.repo
+-rw-r--r-- 1 root root  951 Oct  2  2017 epel.repo
+-rw------- 1 root root  170 Apr 29 15:06 heanet.repo
+-rw------- 1 root root  401 May  5 09:13 nginx.repo
+-rw-r----- 1 root root  358 Jan 25  2021 redhat.repo
+
+#список установленных репозиториев
+sudo yum repolist
+#Each repositories details like name, id, number of packages available, total size, link details, timestamps, etc can be viewed by using verbose mode
+sudo yum -v repolist 
+sudo yum repolist all
+
+# поиск nginx в репозиториях
+sudo yum search nginx
+
+Дима старик:
+Установка openssl с понижением версии:
+- вниметельно писать номер версии 
+sudo yum install openssl-1.0.2k-19.el7
+sudo yum downgrade openssl-1.0.2k-19.el7
+- не забываем, что понижат нужо не только версии openssl но и версии зависимых пакетов.
+sudo yum downgrade openssl-1.0.2k-19.el7 openssl-libs-1.0.2k-19.el7
+
+# список установленных openssl пакетов
+rpm -qa | grep openssl
+
+# Вернули пустой список. Почему?
+rpm -qa | grep nginx
+
+rpm -qa | grep pexpect
+--------------------------------------install pexpect-3.3 ------------------------------------------------------------------
+1)
+sudo yum --showduplicates list pexpect
+2)
+sudo yum search pip | grep python
+Failed to set locale, defaulting to C
+python-django-pipeline.noarch : An asset packaging library for Django
+python-virtualenv-api.noarch : An API for virtualenv/pip
+python2-apipkg.noarch : A Python namespace control and lazy-import mechanism
+python2-pip.noarch : A tool for installing and managing Python 2 packages
+python3-apipkg.noarch : A Python namespace control and lazy-import mechanism
+python3-pip.noarch : A tool for installing and managing Python3 packages
+python34-pip.noarch : A tool for installing and managing Python3 packages
+3) 
+sudo yum install -y python2-pip
+4)
+sudo pip install pexpect==3.3
+
+
+pip freeze | grep pexpect 
+pexpect==3.3
+
+
+python -c "import pexpect; print(pexpect.__version__)"
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+Падаем с той же ошибкой
+TASK [shared/gnupg_import_key : Import key] **************************************************************************************************
+task path: /home/ansible/ansible-box-cib-2022-04-22-6094b/shared/roles/gnupg_import_key/tasks/main.yml:7
+fatal: [cib-app]: FAILED! => {"changed": false, "failed": true, "msg": "Insufficient version of pexpect installed (2.3), this module requires pexpect>=3.3. Error was 'module' object has no attribute 'runu'"}
+
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/sec-managing_yum_repositories
+
+sudo yum-config-manager --enable centos
+
+
+виснет.
+sudo yum install yum-config-manager 
+
+Мне кажется, что как то не правильно установился пакет версии 3.3.

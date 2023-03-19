@@ -1,0 +1,12 @@
+Thunderbird:
+For andrey email decryption andrey_OpenPGP_0x2361F07EA1CC5271.asc on:
+Account Settings > select your account > End-to-End Encryption > OpenPGP Key Manager
+При отправке писем через Thunderbird нужно выбрать:
+Security -> Requaire Encryption
+
+Посмотреть список ключей
+Menu | Tools | OpenPGP 
+
+Для сохранения(импортирования) ключа нажать в письме нужно в нижнем левом углу на прикрепленный ключ и выбрать импортировать.
+Для отправления своего ключа нужно нажать отправить письмо и Security | Attach my public key
+

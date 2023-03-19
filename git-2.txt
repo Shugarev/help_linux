@@ -1,0 +1,337 @@
+шпаргалка https://github.github.com/training-kit/downloads/ru/github-git-cheat-sheet/
+
+пример комита
+[UPDATE] stacking elements on Navbar [check description]
+
+- [IMPLEMENT] use css-grid instead of flexbox
+- [IMPLEMENT] use grid-template-columns repeated 4 times with 1fr wide
+- [IMPLEMENT] every element is placed in the center respectively to the parent grid div
+- [SUGGESTION] this setting can help us better in mobile development by switching columns to rows
+- [FIX] fix padding on each element by decreasing it from 15px to 10px
+- [FIX] set the elements div's left margin to auto to be aligned at the end of the parent navbar div automatically
+- [UPDATE] remove bootstrap classes and use own made classes
+
+
+[REFACTORING] Inspecting code warnings 
+- reformate code
+- remove unused requirement
+
+git checkout one-way-operations
+или в интерфейсе в правом нижнем углу, где "master" написано, нажать, и выбрать чекаут ветки one-way-operations
+
+
+cd Python-local/cryptofx2
+git pull origin master --rebase (команда Тимура для затягивания свежих изменений)
+
+
+﻿команды Git
+tig - графический интерфейс (клавиши j,k Для пермещения между позициями)
+git diff --cached (что в индексе готово для коммита)
+git diff HEAD покажет изменения в рабочей директории от последнего коммита
+
+git revert HEAD отменяет предидущий commit
+git reset --hard (хэш код) перенос указателя последнего commita
+
+
+git add ../ .
+
+git ci --amend (изменяет предидущий коммит)
+
+
+git rm ../htdocs/js/script-gd.js (удаляет файл из ветки, например если мы его удалили или переимеровали в проекте)
+
+
+Мы действительно не хотим создавать отдельный коммит только ради электронной почты. Давайте изменим предыдущий коммит, включив в него адрес электронной почты
+git add hello.html
+git commit --amend -m "Add an author/email comment"
+
+
+[------Для синхронизации проекта себе -----]
+git stash (припрятываем все локальные изменения, получая чистую рабочую копию)
+git pull --rebase
+git stash apply (достать изменения)
+
+git fetch - показывет свежие измения.
+
+git rebase --continue ( применяется после разрешения конфликтов)
+перед этим добавить все файлы (git add )
+
+git checkout ../htdocs/css/style.css( откатывает изменения в файле style.css предварительно сделать команде git st )
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+gedit /home/sergey/.gitconfig - редактирование конфигурациоонного файла
+
+komodo-edit /media/truecrypt1/risk-calc/.git/logs/HEAD
+
+cd /media/truecrypt1/risk-calc/app/templates/root
+
+git status- проверка состояния репозитория
+
+git add form.tpl
+git add about.tpl
+git add contacts.tpl
+git add partners.tpl
+git add profile.tpl
+
+git commit -m "Last chanage"
+git commit
+git status
+git add . - добавления всех изменений в файлы текущего каталога и его подкаталоги
+
+cd /media/truecrypt1/risk-calc/htdocs/js
+git add script.js
+git commit -m "commit js"
+
+cd 1app/templates/wrappers
+git add .
+git commit -m "commit html.tpl"
+
+git log просматривать историю проекта
+git log --pretty=oneline одностраничная история проекта
+git log --pretty=format:"%h %ad | %s%d [%an]" --graph --date=short
+co = checkout
+ci = commit
+st = status
+br = branch
+hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+type = cat-file -t
+dump = cat-file -p
+
+git tag v1 Создайте тег первой версии
+git checkout master переключится на ветку master
+
+cd /media/truecrypt1/risk-calc/
+git tag sh
+
+git checkout master
+
+cd /media/truecrypt1/risk-calc/app/templates
+git branch makeup
+git checkout -b makeup
+git config branch.makeup.rebase true
+git add .
+git commit -m "v1.0"
+
+git branch --set-upstream-to=origin/makeup
+
+git pull --rebase
+git branch makeup - создать ветку makeup
+(tig)
+git diff --cached сравнение
+
+cd /media/truecrypt1/risk-calc
+git checkout makeup
+git hist -посмотреть историю проекта  в удобной форме
+git status
+git diff
+git add . ( git add ../ . )
+git commit -m "Подверстывание элементов первой вкладки.  Перенос данных с первого tab на второй tab."
+git pull --rebase
+git status
+git push
+
+
+---------------------------------------------------
+
+git checkout -b datepicker создать новую ветку datepicker
+git push origin datepicker(для того, чтобы запушить в этой ветки)
+git checkout master (сделать master дефолтной)
+
+--------------------------------------------------------------------------
+Отмена изменений если файл добавлен командой add(git add hello.html)
+git status -смотрим, что изменения добавлены
+git reset HEAD hello.html --отменяет изменения
+git checkout hello.html --убирает файл из индексирования 
+git status -смотрим измененения
+-------------------------------------------------------------------
+Отмена коммитов
+git revert HEAD --no-edit
+Команду --no-edit можно игнорировать
+Мы можем отменить любой произвольной коммит в истории, указав его хэш-значение.
+git hist -Проверка лога показывает нежелательные и отмененные коммиты в наш репозиторий.
+Второй вариант!!!!!!
+git hist
+результат
+* 45fa96b 2011-03-09 | Revert "Oops, we didn't want this commit" (HEAD, master) [Alexander Shvets]
+* 846b90c 2011-03-09 | Oops, we didn't want this commit [Alexander Shvets]
+* fa3c141 2011-03-09 | Added HTML header (v1) [Alexander Shvets]
+* 8c32287 2011-03-09 | Added standard HTML page tags (v1-beta) [Alexander Shvets]
+Для начала отметьте эту ветку
+git tag oops
+Глядя на историю лога (см. выше), мы видим, что коммит с тегом «v1» является коммитом, предшествующим ошибочному коммиту. Давайте сбросим ветку до этой точки. Поскольку ветка имеет тег, мы можем использовать имя тега в команде сброса (если она не имеет тега, мы можем использовать хэш-значение).
+git reset --hard v1
+git hist
+* fa3c141 2011-03-09 | Added HTML header (HEAD, v1, master) [Alexander Shvets]
+* 8c32287 2011-03-09 | Added standard HTML page tags (v1-beta) [Alexander Shvets]
+
+
+***********************************************************************************************
+из папки для переключении между ветками и сохранении моих изменений
+~/projects/demo/packages
+git status
+git stash
+...
+ничего не добавлено в коммит, но есть неотслеживаемые файлы (используйте «git add», чтобы отслеживать их)
+
+git fetch
+
+git checkout ml_hotfix_objectdb_9979
+
+git stash apply  
+
+Посмотреть изменения
+git diff
+***************************************************************************************************
+
+(12:20:00) cm@writingbears.com: сделай git stash save, потом git checkout master, почисти базу и заново обучи.
+если нули пропадут, значит косяк в твоих изменениях. если останутся, значит проблема глубже
+(12:20:10) cm@writingbears.com: чтобы свои изменения вернуть - git stash pop
+(12:20:48) cm@writingbears.com: и use warnings лучше не отключать
+
+выполнил комнанды 
+git stash save
+git checkout master
+
+Проверил git status получил сообщение
+На ветке master
+Ваша ветка отстает от «origin/master» на 3 коммита и может быть перемотана вперед.
+  (используйте «git pull», чтобы обновить вашу локальную ветку)
+Я правильно понимаю, что мне нужно выполнить команду?
+git pull --rebase
+***************************************************************************************************************
+git stash
+git pull --rebase origin  ml_hotfix_objectdb_9979
+git stash pop
+
+
+#git checkout ml_analyze_factors_9976
+
+
+git stash
+git pull --rebase origin  ml_hotfix_objectdb_9979
+git stash pop
+
+
+git stash
+git pull --rebase origin  ml_analyze_factors_9976
+git stash pop
+
+
+git stash
+git pull --rebase origin finally_independent_9974
+git stash pop
+ 
+
+# запустить с жесткого диска команду
+(18:14:07) sv@writingbears.com: sudo dd if=/dev/sda5 of=hdd_backup.img bs=256000
+sudo watch -n 300 killall -s USR1 dd
+
+
+# обновить базу
+ cat data/*.sql | mysql -u ml -p ml
+
+
+чтобы мои изменения сохранились надо так?
+из дирректории 
+cd ~/projects/packages/machine-learning 
+git stash save
+git pull --rebase 
+git stash pop
+
+
+Перед этим добавить все нужные файлы через git add
+(09:55:36) Дмитрий sv@writingbears.com: git add .
+git add src/Box/MachineLearning/Resolver/RepeatedEmail.pm
+git add src/Box/MachineLearning/Factor/JoinFactors.pm
+git add src/Box/MachineLearning/Resolver/Freemail.pm
+git add data/0000_model.sql
+git add src/Box/MachineLearning/Resolver/Ip.pm
+git add src/Box/MachineLearning/Profile/Shield.pm
+git add src/Box/MachineLearning/ModelCreator.pm
+git add src/Box/MachineLearning/Resolver/CardSubType.pm
+Создать патч
+git diff --cached >/home/sergey/projects/data/ml.patch
+
+
+*******************************************************************
+********** откатить изменения в одном файле machine-learning/src/Box/MachineLearning/Profile/ModelG.pm 
+********************************************************************
+
+
+1)в новой дирректории выполнить команду 
+git init
+
+2) Переходим 
+https://github.com/Shugarev/evaluation-service
+
+3) клонируем репозиторий ( адрес берем в git)
+git clone https://github.com/Shugarev/evaluation-service.git
+Username for 'https://github.com':Shugarev
+password:Shugarev1974
+
+4) В файл .gitignore  добавляем игнорированные файлы и директории для комита
+*.csv
+.idea
+
+
+cd /mnt/files/projects/packages
+tig
+
+git checkout machine-learning/src/Box/MachineLearning/Profile/ModelG.pm
+tig
+
+https://github.com/Shugarev/evaluation-service
+login:shugarev74@gmail.com
+pass:Shugarev1974  
+
+
+
+tutorial
+https://thinkster.io/tutorials/django-json-api
+django-tutorial
+
+
+collaboration add collaboration.
+
+1) добавить ключи в git препозиторий
+2) сохранить пароли для git hub
+2a) - создать Django REST приложение 
+
+3) создать чистый python conatainer и установить все что нужно, 
+влкючая Jango и XGBoost 
+ 4) Хорошее покрытие тестами.
+
+2019-05-31
+merge изменения в мастер
+1) Переключаемся на мастер
+git checkout master
+2) затягиваем свежие изменения 
+git pull
+3) merge изменения из ветки tidying_code в master
+git merge --no-ff tidying_code
+4) pf 
+git push origin master
+
+
+2019-05-31 Создание новой ветки
+1) создаем новую ветку локально
+git checkout -b log_code
+2) Пушим в удаленный репозиторий
+git push origin log_code
+
+
+
+a) git add.  добавить изменения
+б) git stash  - cпрятать изменения
+в) git pull затянуть изменения 
+г) git stash apply восстанавливает спрятанные изменения
+
+
+создал ветку с dataset-и. Закомитил в эту ветку только dataset-ы. 
+git status и посмотреть код этой векти hash
+перейти в master 
+
+

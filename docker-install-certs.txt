@@ -1,0 +1,83 @@
+----------------------------Подложить серты на АПП машину-------------------------
+Серты лежат на host машине( на локальном ноуте):
+/etc/docker/certs.d/docker-registry.smarthomedevs.work 
+/etc/docker/certs.d/registry.smarthomedevs.work
+
+дополнительно серты лежат в 
+/home/sergey/.docker/ 
+есть серты для boxrootless  machine  rootless antifraud rootless  shieldrootless
+
+Пр разворачивании проекта box нужно залогиниться в двух репозиториях:
+docker login registry.smarthomedevs.work
+reader:LIgiuofh8i13
+
+docker login docker-registry.smarthomedevs.work
+ci_reader:kpXVCJ9#eyKleHAi
+/home/sergey/.docker/config.json (Base64 Decode можно раскодировать логины и пароли)
+
+Положить серты на АПП машину в 
+/home/shield/.config/docker/certs.d/registry.smarthomedevs.work/
+серты на хост машине лежат в /etc/docker/certs.d/registry.smarthomedevs.work 
+
+
+
+
+----Анахронизм--------
+export MYREPO=releases.boxplat.com/boxplat
+docker login releases.boxplat.com/boxplat
+username:** Username:boxplat
+Password:7lEib@tp=+K1oF0;
+Положить серты на АПП машину в 
+/home/box/.config/docker/certs.d/releases.boxplat.com/ca.crt
+Файл ca.crt на host машине лежит в ~/box-ubuntu20-docker-rootless-192.168.233.45
+----------------------------Установка docker и docker-compose -------------------------
+Запустит local_install.sh с ключем -a.
+
+https://www.digitalocean.com/community/tutorials/docker-ubuntu-18-04-1-ru
+sudo apt update
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+sudo apt update
+apt-cache policy docker-ce
+#      18.03.1~ce~3-0~ubuntu 500
+#        500 https://download.docker.com/linux/ubuntu bionic/stable amd64 Packages
+sudo apt install docker-ce 
+sudo systemctl status docker
+
+# add user to docker group
+sudo usermod -aG docker ${USER}
+su - ${USER}
+id -nG
+#sergey adm cdrom sudo dip plugdev lpadmin sambashare docker
+
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04
+Установка docker-compose v 1.29
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+
+-------------------------------------------------------------------------------------------------
+Dmitriy https://hub.docker.com/_/ubuntu/
+вместо виртуалок проще и быстрее билдить модули в докере. все старые версии тут есть
+
+docker run -it --rm -v $PWD:/module_build ubuntu:xenial bash
+root@95be3c89a530:/# apt update
+root@95be3c89a530:/# apt install cpanminus build-essential
+root@95be3c89a530:/# mkdir -p /opt/project
+root@95be3c89a530:/# cd /opt/project/
+root@95be3c89a530:/# cpanm -L ./local Crypt::JWT
+...
+
+
+https://habr.com/ru/post/659813/
+Docker Swarm для самых маленьких
+Node - это наши виртуальные машины, на которых установлен docker. Есть manager и workers ноды. Manager нода управляет workers нодами. Она отвечает за создание/обновление/удаление сервисов на workers, а также за их масштабирование и поддержку в требуемом состоянии. Workers ноды используются только для выполнения поставленных задач и не могут управлять кластером.
+
+Stack - это набор сервисов, которые логически связаны между собой. По сути это набор сервисов, которые мы описываем в обычном compose файле. Части stack (services) могут располагаться как на одной ноде, так и на разных.
+
+Service - это как раз то, из чего состоит stack. Service является описанием того, какие контейнеры будут создаваться. Если вы пользовались docker-compose.yaml, то уже знакомы с этой сущностью. Кроме стандартных полей docker в режиме swarm поддерживает ряд дополнительных, большинство из которых находятся внутри секции deploy.
+
+Task - это непосредственно созданный контейнер, который docker создал на основе той информации, которую мы указали при описании service. Swarm будет следить за состоянием контейнера и при необходимости его перезапускать или перемещать на другую ноду.

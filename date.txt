@@ -1,0 +1,30 @@
+sync laptop time
+sudo timedatectl set-ntp on
+
+# set timezone
+ln -fs /usr/share/zoneinfo/Europe/Kiev /etc/localtime
+
+ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
+
+timedatectl list-timezones
+sudo timedatectl set-timezone Europe/Kiev
+
+
+print date in format example comand
+date '+%Y-%m-%d'
+
+.bashrc
+alias ls='ls --color=auto --time-style=long-iso'
+
+
+# check ntp status. restart ntp server  if status is failed.
+sudo service ntp status
+
+# ntp conf
+cat /etc/ntp.conf 
+#ntpd
+#sudo ntpd
+#ntpdate
+
+Centos7 set date. Turn off timedatectl service
+# date 11150000

@@ -1,0 +1,23 @@
+ifconfig -  включать или выключать сетевые интерфейсы, настраивать их параметры, 
+переключать режимы и многое другое. 
+Потом была разработана утилита ip, которая содержит больше функций, и имеет совсем другой синтаксис.
+
+ip addr show(ip a) 
+ip -br a show - кратко
+
+New equivalents:
+net-tools	iproute2
+ifconfig	ip addr, ip link
+ifconfig    (interface stats)	ip -s link
+route	    ip route
+arp	        ip neigh
+netstat	    ss
+netstat -M	conntrack -L
+netstat -g	ip maddr
+netstat -i	ip -s link
+netstat -r	ip route
+iptunnel	ip tunnel
+ipmaddr	    ip maddr
+tunctl	    ip tuntap (since iproute-2.6.34)
+(none) for interface rename	ip link set dev OLDNAME name NEWNAME
+brctl	    bridge (since iproute-3.5.0)

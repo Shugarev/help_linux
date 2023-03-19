@@ -1,0 +1,22 @@
+1 при прохождении тестов логи записываются в 
+box@ubuntu18-control:~/boxtutu/ansible-box-tutu-2022-01-04-f402a/box$
+utests.stderr.txt
+utests.stdout.txt
+utests.stdout.txt.tap
+utests.stdout.txt.xml
+
+box@ubuntu18-proxy:/var/log/nginx$ ls -lt
+
+box@ubuntu18-control:~$ ssh box@proxy 'ls -lt /var/log/nginx'
+
+box@ubuntu18-control:~$ ssh box@cnt 'ls -lt /var/log/nginx'
+
+sudo tail /var/log/mysqld.log
+
+
+sed -i 's/[\]040/ /g' .mysql_history
+
+
+Только разобрался. Спасибо.
+Я создал нового пользователя для api c паролем. 
+Сгенерировал с загрузил сертификат
