@@ -52,6 +52,18 @@ id -nG
 #sergey adm cdrom sudo dip plugdev lpadmin sambashare docker
 
 
+что то не правильно!!!
+sudo curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+sudo apt-get remove docker-compose
+
+which docker-compose
+/usr/local/bin/docker-compose
+
+sudo rm $(which docker-compose)
+
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04
 Установка docker-compose v 1.29
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose

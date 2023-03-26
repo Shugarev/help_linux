@@ -322,3 +322,7 @@ echo  -e "62027935\n62028141\n62028142" | sed 's/.*/"&"/' |  sed ':a;N;$!ba;s/\n
 
 
 find . -maxdepth 1 -exec grep foo {} \;
+
+
+
+sed 's/unix/linux/2g' 

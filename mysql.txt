@@ -53,6 +53,10 @@ echo 'select now();' | mysql -h 172.25.198.2 -u cib-user-test -p test_cib; date
 echo 'select now();' | mysql  -u box -p box; date
 cDKwJDHOQcLfg02-
 
+echo 'select now();' | mysql  -u test -p test_base; date
+eFbWBk%yCgq_dk3_
+
+
 sudo service mysql restart
 
 # Displaying Query Results Vertically
