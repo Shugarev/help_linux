@@ -1,0 +1,82 @@
+http://192.168.0.1/
+admin:admin
+Wireless | Wireless Settings
+
+Заявленная скорость у провайдера 100 Мбит/c
+Фактическая скорости на загрузку  20 Мбит/c
+Скорость на выгрузку - 1 Мбит/c
+Channel:Auto
+Mode:11bgn Mixed
+Channel Width:Auto
+
+
+--LAN
+MAC Address:	
+A0-F3-C1-10-F7-D4
+IP Address:	
+192.168.0.1
+Subnet Mask:	
+255.255.255.0
+
+
+-- Wireless
+Wireless Radio:	Enable
+Name (SSID):	sialis
+sialis2
+Channel:	Automatic (Current channel 1)
+Mode:	11bgn mixed
+Channel Width:	Automatic
+MAC Address:	A0-F3-C1-10-F7-D4
+WDS Status:	Disable
+
+
+--WAN
+MAC Address:	00-13-8F-39-6A-21
+IP Address:	77.122.109.12	Dynamic IP
+Subnet Mask:	255.255.248.0	 
+Default Gateway:	77.122.104.1	  
+DNS Server:	77.121.21.44 , 82.144.192.10
+
+
+номер договра 2370480
+77.122.109.12
+050-502-22-50
+
+
+Status Help
+The Status page displays the Router's current status and configuration. All information is read-only.
+
+LAN - The following parameters apply to the LAN port of the Router. You can configure them in the Network -> LAN page.
+
+MAC Address - The physical address of the Router, as seen from the LAN.
+IP Address - The LAN IP address of the Router.
+Subnet Mask - The subnet mask associated with LAN IP address.
+Wireless - These are the current settings or information for Wireless.You can configure them in the Wireless -> Wireless Settings page.
+
+Wireless Radio - Indicates whether the wireless radio feature of the Router is enabled or disabled.
+Name(SSID) - The SSID of the Router.
+Channel - The current wireless channel in use.
+Mode - The current wireless mode which the Router works on.
+MAC Address - The physical address of the Router, as seen from the WLAN.
+WDS Status - The status of WDS' connection, Init: WDS connection is down; Scan: Try to find the AP; Auth: Try to authenticate; ASSOC: Try to associate; Run: Associated successfully.
+WAN - The following parameters apply to the WAN ports of the Router. You can configure them in the Network -> WAN page.
+
+MAC Address - The physical address of the WAN port, as seen from the Internet.
+IP Address - The current WAN (Internet) IP Address. This field will be blank or 0.0.0.0 if the IP Address is assigned dynamically and there is no connection to Internet.
+Subnet Mask - The subnet mask associated with the WAN IP Address.
+Default Gateway - The Gateway currently used by the Router is shown here. When you use Dynamic IP as the connection Internet type, the Renew button will be displayed here. Click the Renew button to obtain new IP parameters dynamically from the ISP. And if you have got an IP address Release button will be displayed here. Click the Release button to release the IP address the Router has obtained from the ISP.
+DNS Server - The DNS (Domain Name System) Server IP addresses currently used by the Router. Multiple DNS IP settings are common. Usually, the first available DNS Server is used.
+Online Time - The time that you online. When you use PPPoE as WAN connection type, the online time is displayed here. Click the Connect or Disconnect button to connect to or disconnect from Internet.
+Secondary Connection - Besides PPPoE, if you use an extra connection type to connect to a local area network provided by ISP, then parameters of this secondary connection will be shown in this area.
+
+Traffic Statistics - The Router's traffic statistics.
+
+Sent (Bytes) - Traffic that counted in bytes has been sent out from the WAN port.
+Sent (Packets) - Traffic that counted in packets has been sent out from WAN port.
+Received (Bytes) - Traffic that counted in bytes has been received from the WAN port.
+Received (Packets) - Traffic that counted in packets has been received from the WAN port.
+System Up Time - The length of the time since the Router was last powered on or reset.
+
+
+1) настроить nginx.
+3hKdamh3N68xgAS

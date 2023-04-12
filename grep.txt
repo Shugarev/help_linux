@@ -20,6 +20,8 @@ grep -R --include="*.R" "apply"
 grep -r --include=\*.{py,ipynb} "keras" 
 grep -R --include="*2018-07-11*" cross | grep -v "Wex"
 
+find . -maxdepth 1 -type f -exec grep -HE 'checkout' {} \;
+grep -i gpg *.env
 
 считает кол-во,если не и выводит одну строку выши и одну строку ниже
 grep -vnEC 1 "2016-11-(0[3-9]|1[0-3])" data.csv

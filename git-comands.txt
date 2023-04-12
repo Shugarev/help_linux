@@ -10,6 +10,10 @@ git pull --rebase
 git reset --hard <hash>
 git submodule update --recursive
 
+
+git reset --hard 468643b1e76c0ad44d5a0b315732d5e8b8ed211b
+git submodule update --recursive
+
 ------------ Работа с тегами------------------------
 # Cоздать ветку от мастера с hash и перейти не нее.
 git checkout -B <hash>  
