@@ -1,0 +1,72 @@
+https://www.8host.com/blog/preobrazovanie-dannyx-json-s-pomoshhyu-jq/
+
+#remove 
+echo '[{"foo": "bar"}]' | jq '.[]'
+{  "foo": "bar"}
+
+
+seaCreatures.json
+[
+    { "name": "Sammy", "type": "shark", "clams": 5 },
+    { "name": "Bubbles", "type": "orca", "clams": 3 },
+    { "name": "Splish", "type": "dolphin", "clams": 2 },
+    { "name": "Splash", "type": "dolphin", "clams": 2 }
+]
+jq '.[] | .name' seaCreatures.json
+"Sammy"
+"Bubbles"
+"Splish"
+"Splash"
+
+
+jq 'map(.clams)' seaCreatures.json
+jq '[.[] | .clams]' seaCreatures.json
+[
+  5,
+  3,
+  2,
+  2
+]
+
+Получить сумму значений массива:
+jq 'map(.clams) | add' seaCreatures.json
+12
+
+Сохранить только те значения массива, значение типа которых равно “dolphin”.
+jq 'map(select(.type == "dolphin"))' seaCreatures.json
+[
+  {
+    "name": "Splish",
+    "type": "dolphin",
+    "clams": 2
+  },
+  {
+    "name": "Splash",
+    "type": "dolphin",
+    "clams": 2
+  }
+]
+
+Чтобы сохранить только значение clams, можно добавить название поля в конец параметра map:
+jq 'map(select(.type == "dolphin").clams)' seaCreatures.json
+[
+  2,
+  2
+]
+
+Приведенный ниже фильтр указывает jq создать объект JSON, который содержит:
+Атрибут creatures, который содержит список значений name каждого creature.
+Атрибут totalClams, содержащий сумму значений clams каждого creature.
+Атрибут totalDolphinClams, в котором содержится сумма значений clams каждого creature, для которого тип равен “dolphin”.
+
+jq '{ creatures: map(.name), totalClams: map(.clams) | add, totalDolphinClams: map(select(.type == "dolphin").clams) | add }' seaCreatures.json
+{
+  "creatures": [
+    "Sammy",
+    "Bubbles",
+    "Splish",
+    "Splash"
+  ],
+  "totalClams": 12,
+  "totalDolphinClams": 4
+}
