@@ -1,0 +1,88 @@
+Скачать архив https://git.smarthomedevs.work/devops/rootless-docker-provision
+Распаковать rootless-docker-provision-main в директорию ~/box-docker-clients
+
+Выполнить инсрукции из файла /home/sergey/box-docker-clients/rootless-docker-provision-main/README.md
+<APP_SYSTEM_USERNAME> - box; <APP_IP_ADDRESS> - 192.168.233.45; <NODE_NAME> - boxlapsa(В моем случае)
+
+Создать виртуальную машину с ~/vagrant-files/ubuntu20-box-docker-rootless-192.168.233.45 с пользователем boxer для удобства поставить понятный hostname.
+Vagrantfile
+*** 
+config.vm.hostname = "boxlapsa"
+
+Скопировать содержимое архива на АПП машину(в директорию boxer) и выполнить из под sudo процедуру rootless:
+sudo su 
+#export APP_USER=box
+#export APP_DOCKER_IP=192.168.233.45
+#export APP_NODE_NAME=boxlapsa
+#./provision.sh 
+
+Для доступа на АПП машину для пользователя box без пароля скопировать директрию .ssh и поменять права:
+sudo cp /home/boxer/.ssh 
+sudo chown -R  box:box /home/box/.ssh
+
+После выполнения ./provision.sh забрать архив docker-control-boxlapsa.tar.gz из витруальной машины на Control машину( т.е. на локальную машину).
+распаковать архив и скопировать архив в директорию .docker
+cp  ~/box-docker-clients/docker-control-boxlapsa/boxlapsa ~/.docker/
+
+## Выполнять команды из файла ~/box-docker-clients/box-2023-04-24-9cfd3b1/DEPLOY.md
+
+Выполнить в домашней директории 
+eval $(./control.sh boxlapsa)
+
+docker pull releases.boxplat.com/boxplat/release:2023-04-24-9cfd3b1
+
+В директории /home/sergey/box-docker-clients/
+docker run -it --rm releases.boxplat.com/boxplat/release:2023-04-24-9cfd3b1 release | base64 -di > box-2023-04-24-9cfd3b1.tar.gz
+Получил такой архив box-2023-04-24-9cfd3b1.tar.gz
+
+
+## Подготовка БД
+Провести установку mysql5.7 согласно файла mysql-percona.txt(добавить необходимые настпройки)
+CREATE DATABASE box_db;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'r00t';
+FLUSH PRIVILEGES;
+CREATE USER 'box'@'%' IDENTIFIED BY 'cDKwJDHOQcLfg02-';
+GRANT ALL ON box_db.* TO 'box'@'%';  
+FLUSH PRIVILEGES;
+
+Проверить, что есть доступ с control машниы
+mysql -h 192.168.233.45 -uroot -p 
+r00t
+mysql -h 192.168.233.45  -u root -p box_db < database_provision.sql
+
+скопировать файлы 
+cp example.app.env boxlapsa.app.env
+cp example.node.env boxlapsa.node.env 
+cp example.project.env boxlapsa.project.env
+
+В boxlapsa.node.env  изменить тэг релиза
+***
+# Тэг релиза
+TAG=2023-04-24-9cfd3b1
+
+В boxlapsa.project.env заменить box.local на lapsa.local
+sed -i 's/box.local/lapsa.local/g' boxlapsa.project.env
+Просмотреть файлы boxlaps.*.env и проверить, что выполнились все настройки.
+
+Создать db.conf(В директории /home/sergey/box-docker-clients/certs/ примеры db.conf,erver.*.crt, server.*.key, rest_gpg_ca.crt,rest_gpg_client.pem)
+Положить серты, доступ к bd согласно инструкции
+
+Выполнить команду деплоя:
+./deploy.sh deploy -u -n boxlapsa -P boxlapsa.project.env -P boxlapsa.app.env -N boxlapsa.node.env -f docker-compose.yml
+
+добавить в /etc/hosts
+192.168.233.45 admin.lapsa.local api.lapsa.local checkout.lapsa.local merchant.lapsa.local metrics.lapsa.local admin-api.lapsa.local checkout.lapsa.local merchant.lapsa.local
+
+Проверить доступность
+https://admin.lapsa.local:5443/
+
+Создать пользователя с паролем:
+docker exec -it box_admin /executor.sh CreateAdmin --login tech --group admin_super --email admin@admin.admin
+tech
+qazxsw12
+
+Создать сертификат:
+docker exec -it box_admin /executor.sh GenerateCertificate --type client --for admin --name tech
+Path: /opt/project/profile/certs/admin/db/certs/tech.p12
+Expired: Apr 24 15:29:19 2024 GMT
+Password: yBWfA7GpKQv0
