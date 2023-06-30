@@ -7,3 +7,13 @@ ls -s /home/box/boxplat/backoffice-base/layouts/ibs box_layout
 ln -s [Source_File_Path] [Symbolic_Link_Path]
 ln -s [Source_Directory_Path] [Symbolic_Link_Destination_Path]
 
+
+-s means to make a symbolic link. To update a link, either delete the link and create it as above, 
+or use the -f option to ln as well. If you are linking to a folder, you should include the -n option:
+ln -sfn  /home/box/box-ibs-2023-04-07-4db6e boxplat
+
+# вернутся
+ln -sfn  /home/box/box-ibs-2023-05-30-69d61 boxplat
+
+
+ln -sfn  /home/box/box-ibs-2023-06-01-0d340 boxplat

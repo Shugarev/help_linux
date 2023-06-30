@@ -5,7 +5,7 @@ sudo swapon --show
 free -h
 df -h
 
-sudo fallocate -l 1G /swapfile
+sudo fallocate -l 8G /swapfile
 ls -lh /swapfile
 sudo chmod 600 /swapfile
 ls -lh /swapfile
@@ -14,7 +14,8 @@ sudo swapon /swapfile
 sudo swapon --show
 sudo cp /etc/fstab /etc/fstab.bak
 
-echo '/swapfile none swap sw 0 0' | free -h
+# добавить информацию o swap в fstab. Если информации нет в fstab, то swap при перезагруке не появится.
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
 cat /proc/sys/vm/swappiness
 
@@ -24,9 +25,7 @@ NAME      TYPE SIZE USED PRIO
 /swapfile file   2G 1.1G   -2
 
 
-#sudo nano /etc/sysctl.conf
-
-Удалить 
+Удалить вместо /swapfile указать путь к swap file, который указан в fstab
 sudo swapoff /swapfile
 sudo rm  /swapfile
 

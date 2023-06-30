@@ -21,55 +21,63 @@ time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/
 time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/deploy_conf/walletto/deploy.conf
 #time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/deploy_conf/walletto/deploy-without-obfus.conf
 
+
 time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/deploy_conf/centos7/deploy.conf
 time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/deploy_conf/ubuntu14/deploy.conf
+time ./app/bin/box perl app/devutils/ansible_make_release.pl --config $HOME/box/deploy_conf/ibs-src/deploy.conf
+
+
 
 # Обернуть релиз в ansible (в директории ~/box/box-deploy/box_ansible).
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/a1.ini.example --project box --package box-a1-2023-04-10-4db6e.tar.gz --profile a1
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/cib.ini.example --project box --package box-cib-2023-04-07-4db6e.tar.gz  --profile cib
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/connectum.ini.example --project box --package connectum-centos-2023-03-31-42c5a.tar.gz --profile cnt 
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/fmp.ini.example --project box --package box-fmp-2022-12-09-e5dff.tar.gz --profile fmp 
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/ibs.ini.example --project box --package box-ibs-2023-04-10-4db6e.tar.gz --profile ibs 
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/namba.ini.example --project box --package box-namba-2023-04-10-4db6e.tar.gz --profile namba 
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/walletto.ini.example --project box --package box-wlt-2023-04-07-4db6e.tar.gz --profile wlt 
-#./make_release.pl --config $HOME/box/box-deploy/box_ansible/walletto.ini.example --project box --package box-wlt-obfus-2023-04-07-4db6e.tar.gz --profile wlt
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/a1.ini.example --project box --package box-a1-2023-06-29-4e54a.tar.gz --profile a1
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/cib.ini.example --project box --package box-cib-2023-06-29-4e54a.tar.gz --profile cib
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/connectum.ini.example --project box --package connectum-centos-2023-06-29-4e54a.tar.gz --profile cnt 
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/fmp.ini.example --project box --package  box-fmp-2023-06-29-4e54a.tar.gz --profile fmp 
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/ibs.ini.example --project box --package box-ibs-2023-06-29-4e54a.tar.gz --profile ibs 
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/namba.ini.example --project box --package box-namba-2023-06-29-4e54a.tar.gz --profile namba 
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/walletto.ini.example --project box --package box-wlt-2023-06-29-4e54a.tar.gz --profile wlt
+
+
 
 ./make_release.pl --config $HOME/box/box-deploy/box_ansible/centos7.ini.example --project box --package box-centos7-2023-03-27-46864.tar.gz
-./make_release.pl --config $HOME/box/box-deploy/box_ansible/ubuntu14.ini.example --project box --package box-ubuntu14-2023-03-27-46864.tar.gz
-
-
-
-https://git.smarthomedevs.work/box/box/-/commit/16d5de1171a72383a1bf5fe4c318d20371c31a85
+./make_release.pl --config $HOME/box/box-deploy/box_ansible/ubuntu14.ini.example --project box --package box-ubuntu14-2023-05-18-d6c9c.tar.gz
 
 
 # Проверить релиз на соответствие <client code> в имени релиза и в имени файла профиля.
 /ansible-box-<client code>-YYYY-MM-DD-HHMM-HASH/box/roles/customize/tasks/profile_<client code>.yml 
+релиз Ubuntu14 заливать на fmp
 
 # Скопировать готовый релиз на сервер bp-distribution.
-#scp -P 25449 -i ~/.ssh/konst/id_rsa ansible-connectum-centos-2023-04-10-4db6e.tar.gz kb@104.248.192.230:/home/kb/releases/ 
-scp -P 25449 -i ~/.ssh/konst/id_rsa ansible-box-namba-2023-04-10-4db6e.tar.gz namba@104.248.192.230:/home/namba/releases/  
-scp -P 25449 -i ~/.ssh/konst/id_rsa ansible-box-a1-2023-04-10-4db6e.tar.gz a1@104.248.192.230:/home/a1/releases/ 
-scp -P 25449 -i ~/.ssh/konst/id_rsa ansible-box-wlt-2023-04-10-4db6e.tar.gz wlt@104.248.192.230:/home/wlt/releases/  
-scp -P 25449 -i ~/.ssh/konst/id_rsa ansible-box-fmp-2023-04-10-4db6e.tar.gz kb@104.248.192.230:/home/kb/releases/ 
+scp -P 25449 ansible-box-namba-2023-06-29-4e54a.tar.gz namba@104.248.192.230:/home/namba/releases/  
+scp -P 25449 ansible-box-a1-2023-06-29-4e54a.tar.gz a1@104.248.192.230:/home/a1/releases/                  
+scp -P 25449 ansible-box-wlt-2023-06-29-4e54a.tar.gz  wlt@104.248.192.230:/home/wlt/releases/               
+scp -P 25449 ansible-box-fmp-2023-06-29-4e54a.tar.gz kb@104.248.192.230:/home/kb/releases/ 
+
+
+#скопировать промежуточный релиз на kb
+scp -P 25449 ansible-connectum-centos-2023-06-29-4e54a.tar.gz kb@104.248.192.230:/home/kb/releases/  
+
 
 
 #------------------------------ cib -----------------------------
 У cib поменялся пользователь.
 новый пароль CibPay321!@# 
 
-scp -i ~/.ssh/serg/id_rsa ansible-box-cib-2023-04-10-4db6e.tar.gz cib@80.240.130.161:/home/cib/
+scp ansible-box-cib-2023-06-29-4e54a.tar.gz cib@80.240.130.161:/home/cib/
 ssh cib@80.240.130.161 -i ~/.ssh/serg/id_rsa
-pass:CibPay321!@#
-# заливать на control machine([ansible@cib-deploy ~]$)
-scp ansible-box-cib-2023-04-10-4db6e.tar.gz box@85.132.48.138:/home/box/
-pass:CibPay321!@#
-ssh box@85.132.48.138  'ls -lt /home/box/ | head -2'
 
-ansible-box-cib-2023-04-10-4db6e.tar.gz
+# заливать на control machine([ansible@cib-deploy ~]$) новый ip 
+scp ansible-box-cib-2023-06-29-4e54a.tar.gz  box@154.91.2.68:/home/box/
+CibPay321!@#
+ssh box@154.91.2.68 'ls -lt /home/box/ | head -2'
+
+
+-rw-rw-r-- 1 sergey sergey 122818709 2023-06-29 21:51 ansible-box-cib-2023-06-29-4e54a.tar.gz
+
 
 # APP machine
 ssh box@172.25.198.4
-pass:AsdQwe123!@#
+AsdQwe123!@#
 
 ssh box@172.25.198.2
 
@@ -83,19 +91,28 @@ utf8:1
 
 mysql -u cib-user -p -h 172.25.198.2
 
-#------------------------------ ibs -----------------------------  
-scp -i ~/.ssh/serg/id_rs ansible-box-ibs-2023-04-10-4db6e.tar.gz ibs@80.240.130.161:/home/ibs/ 
-ssh ibs@80.240.130.161 -i ~/.ssh/serg/id_rsa  'ls -la /home/ibs/'
+#------------------------------ ibs ----------------------------- 
+достпу через kb 
+
+scp -P 25449 ansible-box-ibs-2023-05-30-69d61.tar.gz  kb@104.248.192.230:/home/kb/releases/ 
+ssh -p 25449 -t kb@104.248.192.230 'cd /home/kb/releases/ ; bash --login' 
+
+scp -i ~/.ssh/serg/id_rsa ansible-box-ibs-2023-06-29-4e54a.tar.gz ibs@80.240.130.161:/home/ibs/  
+ssh ibs@80.240.130.161 
 sudo /root/forti.sh
-pass:Hz;!umnK25%vZrhK
+Hz;!umnK25%vZrhK
 
-scp ansible-box-ibs-2023-04-10-4db6e.tar.gz  box@10.0.9.16:/home/box/
-pass:mMk#xiR5TM$xTA
-
+scp ansible-box-ibs-2023-06-29-4e54a.tar.gz box@10.0.9.16:/home/box/
+mMk#xiR5TM$xTA
 ssh box@10.0.9.16 'ls -lt /home/box/ | head -2 '
 
-ansible-box-ibs-2023-04-04-1f38a.tar.gz
+новый 
+scp ansible-box-ibs-2023-06-29-4e54a.tar.gz box_release@10.0.9.16:/home/box_release/
+O.L}P!vZf2-JqD!#
+ssh box_release@10.0.9.16 'ls -lt /home/box/ | head -2 '
 
+
+-rw-rw-r-- 1 sergey sergey 133929150 2023-06-29 19:06 ansible-box-ibs-2023-06-29-4e54a.tar.gz
 
 ssh boxplat@10.0.9.16 и ожидал, что у меня запросит пароль.
 
@@ -103,16 +120,21 @@ ssh boxplat@10.0.9.16 и ожидал, что у меня запросит па�
 login: boxplat
 Pass: 0sgdJlQGb4SyiV
 
+доступ на АПП машину 
+cat app-101_box_password
+passw: 
+tr0pWl5cSsPfJD
+ssh box@10.0.134.101  
 
 
 #------------------------------ connectum -----------------------------  
-echo 'put ansible-connectum-centos-2023-03-24-46864.tar.gz releases/' | sftp -P 56223 -i ~/.ssh/serg/id_rsa dev-box@fx.connectum.eu
-echo 'put ansible-connectum-centos-2023-04-10-4db6e.tar.gz releases/' | sftp -P 56223 dev-box@fx.connectum.eu
+echo 'put ansible-connectum-centos-2023-04-14-f7eb5.tar.gz releases/' | sftp -P 56223 -i ~/.ssh/serg/id_rsa dev-box@fx.connectum.eu
+echo 'put ansible-connectum-centos-2023-05-15-d6c9c.tar.gz releases/' | sftp -P 56223 dev-box@fx.connectum.eu
 echo 'ls -lt releases/' | sftp -P 56223 dev-box@fx.connectum.eu 
 
 
 
-ansible-connectum-centos-2023-04-10-4db6e.tar.gz
+ansible-connectum-centos-2023-05-15-d6c9c.tar.gz 
 
 # Андрей Шевчук дал команду
 ssh -A kb@104.248.192.230 -p 25449 -i ~/.ssh/konst/id_rsa ssh -tt cib@80.240.130.161
@@ -122,38 +144,34 @@ ssh -A kb@104.248.192.230 -p 25449 -i ~/.ssh/konst/id_rsa ssh -tt cib@80.240.130
 # Для namba ssh gate@80.240.130.161 -i ~/.ssh/serg/id_rsa и см. файл ssh-to-control.txt
 
 # Проверить, что релиз скопировался.
-ssh -p 25449 -i ~/.ssh/konst/id_rsa kb@104.248.192.230 'cd releases; ls -lt | head -3'
-ssh -p 25449 -i ~/.ssh/konst/id_rsa namba@104.248.192.230 'cd releases; ls -lt | head -2'
-ssh -p 25449 -i ~/.ssh/konst/id_rsa a1@104.248.192.230 'cd releases; ls -lt | head -2'
-ssh -p 25449 -i ~/.ssh/konst/id_rsa wlt@104.248.192.230 'cd releases; ls -lt| head -2'
-#ssh -p 25449 -i ~/.ssh/konst/id_rsa cib@104.248.192.230 'cd releases; ls -lt | head -2'
+ssh -p 25449 kb@104.248.192.230 'cd releases;    ls -lt | head -3'
+ssh -p 25449 namba@104.248.192.230 'cd releases; ls -lt | head -2'
+ssh -p 25449 a1@104.248.192.230 'cd releases;    ls -lt | head -2'
+ssh -p 25449 wlt@104.248.192.230 'cd releases;   ls -lt | head -2'
 
-Релиз kb@bp-distribution:/home/kb/releases/ansible-connectum-centos-2023-03-03-16d5d.tar.gz  - залит 
-Релиз kb@bp-distribution:/home/kb/releases/ansible-box-fmp-2023-03-03-16d5d.tar.gz  - залит
 
 # Пример ответа о готовности релиза на сервере bp-distribution
-Релиз a1@bp-distribution:/home/a1/releases/ansible-box-a1-2023-04-10-4db6e.tar.gz  - залит +++
-Релиз box@cib-deploy:/home/box/ansible-box-cib-2023-04-10-4db6e.tar.gz - залит  ++
-Релиз dev-box@fx.connectum.eu:/releases/ansible-connectum-centos-2023-04-10-4db6e.tar.gz- залит  +++
-Релиз kb@bp-distribution:/home/kb/releases/ansible-box-fmp-2023-04-10-4db6e.tar.gz - залит +++
-Релиз box@control-1:/home/box/ansible-box-ibs-2023-04-10-4db6e.tar.gz  - залит +++
-Релиз namba@bp-distribution:/home/namba/releases/ansible-box-namba-2023-04-10-4db6e.tar.gz  - залит  ++
-Релиз wlt@bp-distribution:/home/wlt/releases/ansible-box-wlt-2023-04-10-4db6e.tar.gz - залит  ++
+Релиз a1@bp-distribution:/home/a1/releases/ansible-box-a1-2023-06-29-4e54a.tar.gz - залит                 
+Релиз box@cib-deploy:/home/box/ansible-box-cib-2023-06-29-4e54a.tar.gz - залит                             
+Релиз dev-box@fx.connectum.eu:/releases/ansible-connectum-centos-2023-06-29-4e54a.tar.gz - залит          
+Релиз kb@bp-distribution:/home/kb/releases/ansible-box-fmp-2023-06-29-4e54a.tar.gz - залит                  
+Релиз box_release@control-1://home/box_release/ansible-box-ibs-2023-06-29-4e54a.tar.gz - залит                               
+Релиз namba@bp-distribution:/home/namba/releases/ansible-box-namba-2023-06-29-4e54a.tar.gz - залит         
+Релиз wlt@bp-distribution:/home/wlt/releases/ansible-box-wlt-2023-06-29-4e54a.tar.gz - залит                
 
--rw-rw-r-- 1 sergey sergey 134049390 2023-04-10 13:26 ansible-box-a1-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 122286549 2023-04-10 13:26 ansible-box-cib-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 119414419 2023-04-10 13:26 ansible-box-fmp-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 133395650 2023-04-10 13:26 ansible-box-ibs-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 121232303 2023-04-10 13:26 ansible-box-namba-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 119764852 2023-04-10 13:26 ansible-box-wlt-2023-04-10-4db6e.tar.gz
--rw-rw-r-- 1 sergey sergey 120189568 2023-04-10 13:26 ansible-connectum-centos-2023-04-10-4db6e.tar.gz
 
+
+Релиз kb@bp-distribution:/home/kb/releases/ansible-box-ubuntu14-2023-05-18-d6c9c.tar.gz - залит
+Патч  namba@bp-distribution:/home/namba/releases/bridge_aft_wuhV5WOi__master_42c5a.tar.gz залил
+Патч wlt@bp-distribution:/home/wlt/releases/run_finance_on_operation_St9hPIVp.tar.gz - залит 
+Патч kb@bp-distribution:/home/kb/releases/pass_real_trace_id_boxplat_Ajt71CtK__master_46864.tar.gz - перезалил на kb
 
 
 Привет.
-ansible-connectum-centos-2023-03-31-42c5a.tar.gz залил на kb.
+ansible-connectum-centos-2023-06-29-4e54a.tar.gz залил на kb.
 Перезалей его плиз на с Тячевкого ip 
-echo 'put ansible-connectum-centos-2023-03-31-42c5a.tar.gz  releases/' | sftp -P 56223 -i ~/.ssh/serg/id_rsa dev-box@fx.connectum.eu
+
+echo 'put ansible-connectum-centos-2023-06-29-4e54a.tar.gz releases/' | sftp -P 56223 -i ~/.ssh/serg/id_rsa dev-box@fx.connectum.eu
 
 
 #Патч  wlt@bp-distribution:/home/wlt/releases/fix_load_custom_rates_Vrm4iVhZ_ON_33e4b -залит
@@ -174,8 +192,11 @@ namba
 wlt
 
 =========================================connectum==================================================================#
-echo 'put ansible-connectum-centos-2023-03-03-16d5d.tar.gz releases/' | sftp -P 56223 dev-box@fx.connectum.eu
+echo 'put ansible-connectum-centos-2023-05-15-d6c9c.tar.gz releases/' | sftp -P 56223 dev-box@fx.connectum.eu
 echo 'ls -lt releases/' | sftp -P 56223 dev-box@fx.connectum.eu 
+
+ansible-connectum-centos-2023-05-15-d6c9c.tar.gz
+
 
 # Андрей Шевчук дал команду
 ssh -A kb@104.248.192.230 -p 25449 -i ~/.ssh/konst/id_rsa ssh -tt cib@80.240.130.161
@@ -201,3 +222,31 @@ Your account has been suspended due to an overdue balance. Please pay the past d
 ssh root@161.35.217.19 -i /home/kb/.ssh/serg/id_rsa
 
 vsts_notification_MOyz7tMv_reopen_1__master_23e65.tar.gz
+
+
+sftp-сервер  46.101.154.70, 
+KuI&TguPo8hoVknIHO*()
+"port": "54322"
+"username": "sftptester"
+/home/sftptester/CORE/IMAGES
+
+--------------------------------------------------------------------------------------------------------------
+принято решение релизить убунту без нового модуля, у этих клиентов он не используется.
+1. package BoxCoreProviderTestSuite;
+- BoxCoreProviderAzericardTest
+- BoxCoreProviderAzericardSignatureTest
+
+2. package BoxCoreSecure3dTestSuite;
+- BoxCoreSecure3dProcessorAzericardIntegrationTest
+- BoxCoreSecure3dProcessorAzericardTest
+
+3. package BoxCoreDriverTestSuite;
+- BoxCoreDriverAzericardTest
+- BoxCoreDriverAzericardIntegrationTest
+
+Это для всех клиентов!!!
+При сборке релиза были изменения:
+app/devutils/ansible_make_release.pl
+в 157 строке.
+if ($path =~ m{antifraud|limiter|router|routes|WebServerLogLoader|DecoratorDB|DB|LibLoader|OrderUtils|CreateElectronicReceiptCorrection|Azericard|ComponentLoader|\.pl}) {
+Я эти изменения всегда в ручную вношу. Их коммитить будут?    

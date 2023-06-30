@@ -92,3 +92,49 @@ nections, but will only slow down things on fast networks.  The default value ca
 figuration files; see the Compression option.
 
 -N  Do not execute a remote command.  This is useful for just forwarding ports.
+
+https://romantelychko.com/blog/1058/
+Устанавливаем socks соединение 
+ssh -f -C2qTnN -D 1080 kb@104.248.192.230 -p 25449
+Где
+-f Запросит ssh перейти в фоновый режим только перед выполнением команды.
+-C Включит сжатие всех данных (включая stdin, stdout, stderr и данные для перенаправленных Х11 и TCP/IP соединений).
+-2 Принуждает ssh использовать только протокол версии 2.
+-q Тихий режим. Подавляет все предупреждения и диагностические сообщения. Будут отображены только фатальные ошибки.
+-T Отменить переназначение терминала.
+-n Перенаправляет стандартный ввод из /dev/null (фактически, предотвращает чтение из стандартного ввода).
+-N Не выполнять удаленную команду.
+-D [локальный IP : ] порт
+
+Firefox.
+Идём «Правка» → «Настройки» → вкладка «Дополнительно» → вкладка «Сеть» → раздел «Соединение» → кнопка «Настроить»
+Устанавливаем там пункт «Ручная настройка сервиса прокси», в поле «Узел SOCKS» пишем наш IP адрес (обычно 127.0.0.1), 
+а в поле «Порт» — указанный порт (в примере 1080).
+Ставим ключ на пункт «SOCKS 5» и применяем настройки.
+После чего идём на любой сайт для определение IP-адреса.
+Например: ip.badrequest.me и видим в значении IP Address не свой IP, а IP удалённого сервера, к которому мы установили SSH-соединение.
+
+sudo netstat -tulnp | grep 1080
+
+доступ на мой ноут на роутере 
+http://192.168.0.1/ 
+вкладка Nat forwarding настроить:
+Service Type	External Port	  Internal IP	       Internal Port	Protocol	Status	Modify
+  tcp	             5544	      192.168.0.107	         22	          TCP
+Добавить строки в /etc/ssh/sshd_config
+PermitRootLogin without-password
+PermitEmptyPasswords no
+PermitRootLogin no
+AllowUsers sergey
+
+Перезапустить ssh 
+sudo service ssh restart
+
+добавить ключ пользователя в 
+~/.ssh/authorized_keys
+
+доступ по ключу 
+ssh sergey@93.76.237.48 -p 5544
+
+93.76.237.48 - ip адрес выданный провайдером
+192.168.0.107  - локальный ip ноута

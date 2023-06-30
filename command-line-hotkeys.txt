@@ -129,3 +129,16 @@ ps aux | sort -nk 3
 Автоматический ответ yes или no
 yes | apt-get update
 yes | command_or_script
+
+
+Free Disk Space
+df -h /
+Filesystem                    Size  Used Avail Use% Mounted on
+/dev/mapper/vagrant--vg-root   62G   13G   47G  21% /
+
+Total size of a directory folder from the command line
+du -h /home/sergey/.cache/ | sort -h
+-h is to get the numbers "human readable", e.g. get 140M instead of 143260 (size in KBytes)
+-s is for summary (otherwise you'll get not only the size of the folder but also for everything in the folder separately)
+
+du -h --max-depth=1  /home/sergey/.cache/

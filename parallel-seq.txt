@@ -1,4 +1,5 @@
 https://zalinux.ru/?p=2623
+https://manpages.ubuntu.com/manpages/impish/man1/parallel.1.html
 
 sudo apt install parallel
 
