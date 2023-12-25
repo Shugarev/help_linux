@@ -49,3 +49,88 @@ SELECT @@profiling;
 
 source  /home/sergey/data/summary-report-slowly/request_w_opt.txt
 SHOW PROFILES;
+
+-- order_fraudreport, поля для матчинга: order_id,fraud_type,created
+INSERT INTO `test_base`.`order_fraudreport`
+            (`id`,
+             `order_id`,
+             `date`,
+             `reason`,
+             `fraud_type`,
+             `report_date`,
+             `extra`,
+             `created`)
+VALUES      ('1',
+             '80607287632181031',
+             '2023-10-08',
+             'fraudreport',
+             '10',
+             '2023-10-09',
+'{\"rrn\":\"\",\"arn\":\"74351062091188763786402\",\"fraud_amount\":\"234.83\"}',
+'2023-08-27 20:43:57');
+
+INSERT INTO `test_base`.`order_fraudreport`
+            (`id`,
+             `order_id`,
+             `date`,
+             `reason`,
+             `fraud_type`,
+             `report_date`,
+             `extra`,
+             `created`)
+VALUES      ('5',
+             '79529497354838039',
+             '0000-00-00',
+             'fraudreport',
+             '10',
+             '2023-08-21',
+'{\"fraud_amount\":\"230.00\",\"arn\":\"74351062091188763786402\",\"rrn\":\"\"}',
+'2023-08-21 18:04:01'); 
+
+
+
+-- operation_extra поля для матчинга: operation_id, processing_date, rapid_dispute_resolution
+INSERT INTO `test_base`.`operation_extra`
+            (`operation_id`,
+             `json`,
+             `arn`,
+             `processing_date`,
+             `rapid_dispute_resolution`)
+VALUES      ('15',
+'{\"comment\":\"\",\"rapid_dispute_resolution\":0,\"reason_code\":\"10.4\",\"settlement_currency\":\"USD\",\"processing_date\":\"2022-05-10\",\"operation_subtype\":null,\"rrn\":\"\",\"vrol_financial_id\":\"10.4-2131\",\"reference_number\":\"5181627955\",\"settlement_amount\":\"7.50\",\"date\":\"2022-05-10\",\"arn\":\"74351062091188763786402\"}'
+             ,
+'74351062091188763786402',
+'2023-08-21',
+'1'); 
+
+-- Запросы для статистики ~/task/box-perl-classes/sql-query/sql-query-by_dispute_fraud_card_schema.sql
+
+-- если мы хотим провести заказ изменить для этого заказа дату, например на 2023-12-20 и чтобы успешно создавались enroll
+-- запоминаем последнее entry_id в данном случае 60 
+-- запоминаем id последней операции в данном случае 10   и id ордера
+-- и проводим заказ и списание.
+
+-- для всех entry `entry_id` > '60' меняем дату создания.
+UPDATE `test_base`.`entry` SET `entry_created` = '2023-12-20 00:00:01' WHERE (`entry_id` > '60');
+
+-- меняем дату с заказа
+UPDATE `test_base`.`order` SET `created` = '2023-12-20 00:00:01' WHERE (`id` = '82223356695974931');
+
+--  меняем дату для всех операций, которе соответствуют заказу
+UPDATE `test_base`.`operation` SET `created` = '2023-12-20 00:00:01' WHERE (`id` > '10');
+
+
+-- для удаления последнего enroll перед проведение enroll посмотреть на последний id в таблице entry допустим 72
+-- запускаем enroll
+
+-- удаляем все entry которые создал enroll.
+DELETE FROM `test_base`.`entry` WHERE (`entry_id` > '72');
+
+-- удаляем сам enroll
+DELETE FROM `test_base`.`enrollment` WHERE (`id` = '82244287988320826');
+
+
+SELECT TABLE_ROWS,TABLE_NAME,AUTO_INCREMENT,TABLE_SCHEMA FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'test_base' AND ( TABLE_ROWS<>0 OR AUTO_INCREMENT>1)
+
+UPDATE  migrator SET value = 0 WHERE name= 'is_locked';
+UPDATE  migrator SET value = '0304' WHERE name= 'last_position';

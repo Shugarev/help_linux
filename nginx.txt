@@ -190,3 +190,10 @@ $ssl_client_v_remain
    189	        proxy_read_timeout 60;
    253	        proxy_read_timeout 60;
 sed -i 's/proxy_read_timeout 60/proxy_read_timeout 130/g' /etc/nginx/sites-available/box
+
+на smarthomedevs:
+docker exec -it box_proxy bash
+cd /etc/nignx
+/etc/nignx/nginx.conf - основной
+/etc/nginx/conf.d/box.conf
+/etc/nginx/baseconfigs/vhosts.ssl.conf настройки для header.

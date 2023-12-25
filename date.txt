@@ -1,6 +1,9 @@
 sync laptop time
 sudo timedatectl set-ntp on
 
+sudo timedatectl set-ntp off
+sudo date --set="2023-08-21 23:54:30"
+
 # set timezone
 ln -fs /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 

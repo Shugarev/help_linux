@@ -76,3 +76,6 @@ Step 5: Launch or start Virtualbox
 ***************************************************************************************
 Сделать snapshot: https://tavalik.ru/snapshots-in-virtualbox/
 Встать на вирталку, которой нужно пользоваться.  В верхнем меню нажать take и дать snapshot понятное название с описанием
+
+Проверить версию virtual box.
+vboxmanage --version 

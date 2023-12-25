@@ -29,3 +29,4 @@ minute hour day_of_month month day_of_week command_to_run
 0 */7 * * * /home/www/myscript.pl
 # Выполнять задание по воскресеньям в 10 час 30 минут
 30 10 * * 0 /home/www/myscript.pl
+
