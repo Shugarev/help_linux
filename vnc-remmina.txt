@@ -1,0 +1,25 @@
+
+https://infoit.com.ua/linux/ustanovka-i-nastrojka-vnc-v-ubuntu-20-04/
+Пароль для подключения vnc на сервере:
+pass:serg14
+
+доступ удаленный доступ 
+193.138.146.89:4466
+
+
+локальный доступ 
+192.168.0.105:5901
+
+cd /boxibs-ubuntu18-192.168.56.105/certs/admin/db/keys/
+openssl rsa -in tech.key -out tech_key.pem
+openssl x509 -in tech.crt -out tech_cert.pem
+openssl pkcs12 -export -out tech_new.p12 -inkey tech_key.pem -in tech_cert.pem 
+
+
+
+
+
+openssl pkcs12 -export -out tech_new.p12 -inkey tech_key.pem -in tech_certт.pem -certfile промежуточный_сертификат.crt
+
+
+openssl pkcs12 -export -inkey your_private_key.key -in pem-file.pem -name my_name -out final_result.pfx
